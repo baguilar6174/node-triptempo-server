@@ -1,0 +1,36 @@
+{
+  "name": "node-triptempo-server",
+  "version": "1.0.0",
+  "description": "Rest API server for Trip Tempo App",
+  "main": "index.js",
+  "repository": "https://github.com/baguilar6174/node-triptempo-server.git",
+  "keywords": [
+    "node",
+    "console",
+    "clean",
+    "architecture",
+    "rest",
+    "api"
+  ],
+  "homepage": "https://github.com/baguilar6174/node-triptempo-server#readme",
+  "author": "Bryan Aguilar",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
+    "dev": "ts-node-dev ./src/app.ts",
+    "dev:watch": "ts-node-dev --respawn --clear --transpile-only ./src/app.ts",
+    "build": "rimraf ./dist && tsc",
+    "start": "yarn build && node dist/app.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.3"
+  }
+}
