@@ -24,6 +24,7 @@
 		"start": "yarn build && node dist/app.js"
 	},
 	"devDependencies": {
+		"@types/express": "^4.17.21",
 		"@types/jest": "^29.5.12",
 		"@types/node": "^20.11.30",
 		"@typescript-eslint/eslint-plugin": "^6.4.0",
@@ -40,5 +41,10 @@
 		"ts-jest": "^29.1.2",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "*"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"env-var": "^7.4.1",
+		"express": "^4.19.2"
 	}
 }
