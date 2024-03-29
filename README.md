@@ -39,6 +39,7 @@ If your want to create build production, run `yarn build`
 - Environment variables
 - Single Page Application + Frontend Router
 - Serve differents files
+- Configure routes and controllers
 
 ## Development Features
 
