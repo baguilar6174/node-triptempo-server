@@ -53,6 +53,9 @@ If your want to create build production, run `yarn build`
 - Serve differents files
 - Configure routes and controllers
 - DTOs pattern
+- Repository Pattern
+- Clean Architecture
+- Use cases
 
 ## Development Features
 

@@ -3,4 +3,4 @@ dist/
 coverage/
 .env
 keys
-postgres/
+/postgres

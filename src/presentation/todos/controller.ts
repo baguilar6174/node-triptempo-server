@@ -1,69 +1,62 @@
 import { type Request, type Response } from 'express';
-import { prisma } from '../../data/postgresdb';
+import { type Send } from 'express-serve-static-core';
+
+import { CreateTodoDto, UpdateTodoDto } from '../../domain/dtos';
+import { CreateTodo, GetTodoById, GetTodos, UpdateTodo, type TodoRepository, DeleteTodo } from '../../domain';
+
+export interface TypedResponse<ResBody> extends Express.Response {
+	json: Send<ResBody, this>;
+}
 
 export class TodoController {
 	//* Dependency injection
-	// constructor() {}
+	constructor(private readonly repository: TodoRepository) {}
 
-	public getAll = async (_req: Request, res: Response): Promise<void> => {
-		const todos = await prisma.todo.findMany();
-		res.json(todos);
+	public getAll = (_req: Request, res: Response): void => {
+		new GetTodos(this.repository)
+			.execute()
+			.then((result) => res.json(result))
+			.catch((error) => res.status(400).json({ error }));
 	};
 
-	// TODO: update types
-	public getById = async (req: Request, res: Response): Promise<Response<unknown, Record<string, unknown>>> => {
+	// TODO: update types in response
+	public getById = (req: Request<{ id: string }>, res: Response): void => {
 		const id = +req.params.id;
-		if (isNaN(id)) return res.status(400).json({ error: 'Id is not a number' });
-		const todo = await prisma.todo.findFirst({
-			where: { id }
-		});
-		if (todo) {
-			return res.json(todo);
-		} else {
-			return res.status(404).json({ error: `Todo with id ${id} not found` });
-		}
+		new GetTodoById(this.repository)
+			.execute(id)
+			.then((result) => res.json(result))
+			.catch((error) => res.status(400).json({ error }));
 	};
 
-	public create = async (req: Request, res: Response): Promise<Response<unknown, Record<string, unknown>>> => {
-		const { text } = req.body;
-		if (!text) return res.status(400).json({ error: 'Text proerty is required' });
-		const todo = await prisma.todo.create({
-			data: {
-				text
-			}
-		});
-		return res.json(todo);
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public create = (req: Request<unknown, unknown, { text: string }>, res: Response) => {
+		const { body } = req;
+		const [error, createDto] = CreateTodoDto.create(body);
+		if (error) return res.status(400).json({ error });
+		new CreateTodo(this.repository)
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			.execute(createDto!)
+			.then((result) => res.json(result))
+			.catch((error) => res.status(400).json({ error }));
 	};
 
-	public update = async (req: Request, res: Response): Promise<Response<unknown, Record<string, unknown>>> => {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public update = (req: Request<{ id: string }, unknown, { text: string; completedAt: string }>, res: Response) => {
 		const id = +req.params.id;
-		if (isNaN(id)) return res.status(400).json({ error: 'Id is not a number' });
-		const todo = await prisma.todo.findFirst({
-			where: { id }
-		});
-		if (!todo) return res.status(404).json({ error: `Todo with id ${id} not found` });
-		const { text } = req.body;
-		const updatedTodo = await prisma.todo.update({
-			where: { id },
-			data: { text }
-		});
-		return res.json(updatedTodo);
+		const [error, updateDto] = UpdateTodoDto.update({ ...req.body, id });
+		if (error) return res.status(400).json({ error });
+		new UpdateTodo(this.repository)
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			.execute(updateDto!)
+			.then((result) => res.json(result))
+			.catch((error) => res.status(400).json({ error }));
 	};
 
-	public delete = async (req: Request, res: Response): Promise<Response<unknown, Record<string, unknown>>> => {
+	public delete = (req: Request, res: Response): void => {
 		const id = +req.params.id;
-		if (isNaN(id)) return res.status(400).json({ error: 'Id is not a number' });
-		const todo = await prisma.todo.findFirst({
-			where: { id }
-		});
-		if (!todo) return res.status(404).json({ error: `Todo with id ${id} not found` });
-		const deleted = await prisma.todo.delete({
-			where: { id }
-		});
-		if (deleted) {
-			return res.json({ deleted });
-		} else {
-			return res.status(400).json({ error: `Todo with id ${id} not found` });
-		}
+		new DeleteTodo(this.repository)
+			.execute(id)
+			.then((result) => res.json(result))
+			.catch((error) => res.status(400).json({ error }));
 	};
 }
