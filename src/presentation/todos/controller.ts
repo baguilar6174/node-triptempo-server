@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 
-import { CreateTodoDto, UpdateTodoDto } from '../../domain/dtos';
+import { CreateTodoDto, PaginationDto, UpdateTodoDto } from '../../domain/dtos';
 import {
 	CreateTodo,
 	GetTodoById,
@@ -24,9 +24,14 @@ export class TodoController {
 		res.status(500).json({ error: 'Internal server error' });
 	};
 
-	public getAll = (_req: Request, res: Response): void => {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public getAll = (req: Request, res: Response) => {
+		const { page = 1, limit = 10 } = req.query;
+		const [error, paginationDto] = PaginationDto.create(+page, +limit);
+		if (error) return res.status(400).json({ error });
 		new GetTodos(this.repository)
-			.execute()
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			.execute(paginationDto!)
 			.then((result) => res.json(result))
 			.catch((error) => {
 				this.handleError(res, error);

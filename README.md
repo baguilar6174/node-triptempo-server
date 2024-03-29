@@ -57,6 +57,8 @@ If your want to create build production, run `yarn build`
 - Clean Architecture
 - Use cases
 - Autentication using tokens
+- Pagination
+- Error handlers
 
 ## Development Features
 
