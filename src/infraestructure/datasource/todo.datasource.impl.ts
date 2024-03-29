@@ -18,7 +18,7 @@ export class TodoDatasourceImpl implements TodoDatasource {
 		const todo = await prisma.todo.findFirst({
 			where: { id }
 		});
-		if (!todo) throw new CustomError(`Todo with id ${id} not found`, 404);
+		if (!todo) throw CustomError.notFound(`Todo with id ${id} not found`);
 		return TodoEntity.fromJson(todo);
 	}
 

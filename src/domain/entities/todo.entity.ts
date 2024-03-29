@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-throw-literal */
+import { CustomError } from '..';
+
 export class TodoEntity {
 	constructor(
 		public id: number,
@@ -12,12 +13,12 @@ export class TodoEntity {
 
 	public static fromJson(obj: Record<string, unknown>): TodoEntity {
 		const { id, text, completedAt } = obj;
-		if (!id) throw 'id is required';
-		if (!text) throw 'text is required';
+		if (!id) throw CustomError.badRequest('id is required');
+		if (!text) throw CustomError.badRequest('text is required');
 		if (completedAt) {
 			const newDate = new Date(completedAt as string);
 			if (isNaN(newDate.getTime())) {
-				throw 'completedAt is not a valid date';
+				throw CustomError.badRequest('completedAt is not a valid date');
 			}
 		}
 		return new TodoEntity(id as number, text as string, new Date(completedAt as string));
