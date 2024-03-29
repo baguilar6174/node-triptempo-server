@@ -22,6 +22,17 @@ Replace your environment variables in `.env` file
 
 ## Running the app
 
+If you need local Postgres database
+
+- Install docker
+- Run `docker compose up -d` This command create a local volumen in root project to save data.
+
+**Important**: If you don't need Postgres from Docker, set your configuration into `.env`
+
+Run `npx prisma migrate dev --name init` to create a migrations and schema in your Postgres database
+
+Run `npx prisma db push` to create tables and relationships
+
 Run `yarn dev`
 
 If your want to create build production, run `yarn build`
@@ -33,6 +44,7 @@ If your want to create build production, run `yarn build`
 - Node
 - Typescript
 - Express
+- Prisma
 
 ### What I learned
 
@@ -40,6 +52,7 @@ If your want to create build production, run `yarn build`
 - Single Page Application + Frontend Router
 - Serve differents files
 - Configure routes and controllers
+- DTOs pattern
 
 ## Development Features
 
