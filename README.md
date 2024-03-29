@@ -56,6 +56,7 @@ If your want to create build production, run `yarn build`
 - Repository Pattern
 - Clean Architecture
 - Use cases
+- Autentication using tokens
 
 ## Development Features
 

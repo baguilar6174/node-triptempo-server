@@ -1,22 +1,36 @@
 import { type Request, type Response } from 'express';
-import { type Send } from 'express-serve-static-core';
 
 import { CreateTodoDto, UpdateTodoDto } from '../../domain/dtos';
-import { CreateTodo, GetTodoById, GetTodos, UpdateTodo, type TodoRepository, DeleteTodo } from '../../domain';
-
-export interface TypedResponse<ResBody> extends Express.Response {
-	json: Send<ResBody, this>;
-}
+import {
+	CreateTodo,
+	GetTodoById,
+	GetTodos,
+	UpdateTodo,
+	type TodoRepository,
+	DeleteTodo,
+	CustomError
+} from '../../domain';
 
 export class TodoController {
 	//* Dependency injection
 	constructor(private readonly repository: TodoRepository) {}
 
+	private readonly handleError = (res: Response, error: unknown): void => {
+		if (error instanceof CustomError) {
+			res.status(error.statusCode).json({ error: error.message });
+			return;
+		}
+		// Posibly logs
+		res.status(500).json({ error: 'Internal server error' });
+	};
+
 	public getAll = (_req: Request, res: Response): void => {
 		new GetTodos(this.repository)
 			.execute()
 			.then((result) => res.json(result))
-			.catch((error) => res.status(400).json({ error }));
+			.catch((error) => {
+				this.handleError(res, error);
+			});
 	};
 
 	// TODO: update types in response
@@ -25,7 +39,9 @@ export class TodoController {
 		new GetTodoById(this.repository)
 			.execute(id)
 			.then((result) => res.json(result))
-			.catch((error) => res.status(400).json({ error }));
+			.catch((error) => {
+				this.handleError(res, error);
+			});
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -37,7 +53,9 @@ export class TodoController {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			.execute(createDto!)
 			.then((result) => res.json(result))
-			.catch((error) => res.status(400).json({ error }));
+			.catch((error) => {
+				this.handleError(res, error);
+			});
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -49,7 +67,9 @@ export class TodoController {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			.execute(updateDto!)
 			.then((result) => res.json(result))
-			.catch((error) => res.status(400).json({ error }));
+			.catch((error) => {
+				this.handleError(res, error);
+			});
 	};
 
 	public delete = (req: Request, res: Response): void => {
@@ -57,6 +77,8 @@ export class TodoController {
 		new DeleteTodo(this.repository)
 			.execute(id)
 			.then((result) => res.json(result))
-			.catch((error) => res.status(400).json({ error }));
+			.catch((error) => {
+				this.handleError(res, error);
+			});
 	};
 }
