@@ -1,14 +1,15 @@
+import { type GetTodoByIdDto } from '../dtos';
 import { type TodoEntity } from '../entities';
 import { type TodoRepository } from '../repositories';
 
 export interface GetTodoByIdUseCase {
-	execute: (id: number) => Promise<TodoEntity>;
+	execute: (getByIdDto: GetTodoByIdDto) => Promise<TodoEntity>;
 }
 
 export class GetTodoById implements GetTodoByIdUseCase {
 	constructor(private readonly repository: TodoRepository) {}
 
-	async execute(id: number): Promise<TodoEntity> {
-		return await this.repository.getById(id);
+	async execute(getByIdDto: GetTodoByIdDto): Promise<TodoEntity> {
+		return await this.repository.getById(getByIdDto);
 	}
 }

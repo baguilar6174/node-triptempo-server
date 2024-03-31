@@ -47,9 +47,6 @@ export class Server {
 		// Shared Middlewares
 		this.app.use(CustomMiddlewares.writeInConsole);
 
-		// Handle errors middleware
-		this.routes.use(ErrorMiddleware.handleError);
-
 		//* Routes
 		this.app.use(this.apiPrefix, this.routes);
 
@@ -73,6 +70,9 @@ export class Server {
 				next(AppError.notFound(`Cant find ${req.originalUrl} on this server!`));
 			});
 		}
+
+		// Handle errors middleware
+		this.routes.use(ErrorMiddleware.handleError);
 
 		this.app.listen(this.port, () => {
 			console.log(`Server running on port ${this.port}...`);

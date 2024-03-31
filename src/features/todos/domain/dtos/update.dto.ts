@@ -1,3 +1,5 @@
+import { type ValidationType } from '../../../../core';
+
 export class UpdateTodoDto {
 	private constructor(
 		public readonly id: number,
@@ -12,19 +14,19 @@ export class UpdateTodoDto {
 		return obj;
 	}
 
-	public static validate(dto: UpdateTodoDto): string[] {
-		const errors: string[] = [];
+	public static validate(dto: UpdateTodoDto): ValidationType[] {
+		const errors: ValidationType[] = [];
 
 		const { id, completedAt } = dto;
 
 		if (!id || isNaN(Number(id))) {
-			errors.push('Id is not a valid number');
+			errors.push({ fields: 'id', constraint: 'Id is not a valid number' });
 		}
 
 		if (completedAt) {
 			const newDate = new Date(completedAt);
 			if (newDate.toString() === 'Invalid Date') {
-				errors.push('CompletedAt must be a valid date');
+				errors.push({ fields: 'completedAt', constraint: 'CompletedAt must be a valid date' });
 			}
 		}
 

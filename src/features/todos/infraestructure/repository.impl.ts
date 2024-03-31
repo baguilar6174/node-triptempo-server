@@ -1,10 +1,11 @@
-import { type PaginationDto } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDto } from '../../shared';
 import {
 	type TodoDatasource,
 	type CreateTodoDto,
 	type TodoEntity,
 	type TodoRepository,
-	type UpdateTodoDto
+	type UpdateTodoDto,
+	type GetTodoByIdDto
 } from '../domain';
 
 export class TodoRepositoryImpl implements TodoRepository {
@@ -14,19 +15,19 @@ export class TodoRepositoryImpl implements TodoRepository {
 		return await this.datasource.create(createDto);
 	}
 
-	async getAll(pagination: PaginationDto): Promise<TodoEntity[]> {
+	async getAll(pagination: PaginationDto): Promise<PaginationResponseEntity<TodoEntity[]>> {
 		return await this.datasource.getAll(pagination);
 	}
 
-	async getById(id: number): Promise<TodoEntity> {
-		return await this.datasource.getById(id);
+	async getById(getByIdDto: GetTodoByIdDto): Promise<TodoEntity> {
+		return await this.datasource.getById(getByIdDto);
 	}
 
 	async update(updateDto: UpdateTodoDto): Promise<TodoEntity> {
 		return await this.datasource.update(updateDto);
 	}
 
-	async delete(id: number): Promise<TodoEntity> {
-		return await this.datasource.delete(id);
+	async delete(getByIdDto: GetTodoByIdDto): Promise<TodoEntity> {
+		return await this.datasource.delete(getByIdDto);
 	}
 }

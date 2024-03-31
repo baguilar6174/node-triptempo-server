@@ -1,89 +1,70 @@
-import { AppError } from '../../../core';
+import { AppError, ONE, ValidationError, ZERO } from '../../../core';
 import { prisma } from '../../../data/postgres';
-import { type PaginationDto } from '../../shared';
-import { TodoEntity, type CreateTodoDto, type TodoDatasource, type UpdateTodoDto } from '../domain';
+import { type PaginationResponseEntity, PaginationDto } from '../../shared';
+import { TodoEntity, CreateTodoDto, type TodoDatasource, UpdateTodoDto, GetTodoByIdDto } from '../domain';
 
 export class TodoDatasourceImpl implements TodoDatasource {
-	public async create(createDto: CreateTodoDto): Promise<TodoEntity> {
-		try {
-			const createdTodo = await prisma.todo.create({
-				data: createDto
-			});
-			return TodoEntity.fromJson(createdTodo);
-		} catch (error) {
-			throw AppError.internalServer(error as string);
-		}
-	}
-
-	public async getAll(pagination: PaginationDto): Promise<TodoEntity[]> {
+	public async getAll(pagination: PaginationDto): Promise<PaginationResponseEntity<TodoEntity[]>> {
+		const errors = PaginationDto.validate(pagination);
+		if (errors.length > ZERO) throw new ValidationError(errors);
 		const { page, limit } = pagination;
-		try {
-			/* const total = await prisma.todo.count();
+		/* const total = await prisma.todo.count();
 			const todos = await prisma.todo.findMany({
 				skip: (page - 1) * limit,
 				take: limit
 			}); */
-			const [total, todos] = await Promise.all([
-				prisma.todo.count(),
-				prisma.todo.findMany({
-					skip: (page - 1) * limit,
-					take: limit
-				})
-			]);
-			const totalPages = Math.ceil(total / limit);
-			const nextPage = page < totalPages ? page + 1 : null;
-			const prevPage = page > 1 ? page - 1 : null;
+		const [total, todos] = await Promise.all([
+			prisma.todo.count(),
+			prisma.todo.findMany({
+				skip: (page - ONE) * limit,
+				take: limit
+			})
+		]);
+		const totalPages = Math.ceil(total / limit);
+		const nextPage = page < totalPages ? page + ONE : null;
+		const prevPage = page > ONE ? page - ONE : null;
 
-			// * You can send this information
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const pagination = {
-				total,
-				totalPages,
-				currentPage: page,
-				nextPage,
-				prevPage
-			};
-
-			return todos.map((todo) => TodoEntity.fromJson(todo));
-		} catch (error) {
-			throw AppError.internalServer(error as string);
-		}
+		return {
+			results: todos.map((todo) => TodoEntity.fromJson(todo)),
+			currentPage: page,
+			nextPage,
+			prevPage,
+			total,
+			totalPages
+		};
 	}
 
-	public async getById(id: number): Promise<TodoEntity> {
-		try {
-			const todo = await prisma.todo.findFirst({
-				where: { id }
-			});
-			if (!todo) throw AppError.notFound(`Todo with id ${id} not found`);
-			return TodoEntity.fromJson(todo);
-		} catch (error) {
-			throw AppError.internalServer(error as string);
-		}
+	public async getById(getByIdDto: GetTodoByIdDto): Promise<TodoEntity> {
+		const errors = GetTodoByIdDto.validate(getByIdDto);
+		if (errors.length > ZERO) throw new ValidationError(errors);
+		const todo = await prisma.todo.findFirst({ where: { id: getByIdDto.id } });
+		if (!todo) throw AppError.notFound(`Todo with id ${getByIdDto.id} not found`);
+		return TodoEntity.fromJson(todo);
+	}
+
+	public async create(createDto: CreateTodoDto): Promise<TodoEntity> {
+		const errors = CreateTodoDto.validate(createDto);
+		if (errors.length > ZERO) throw new ValidationError(errors);
+		const createdTodo = await prisma.todo.create({ data: createDto });
+		return TodoEntity.fromJson(createdTodo);
 	}
 
 	public async update(updateDto: UpdateTodoDto): Promise<TodoEntity> {
-		try {
-			await this.getById(updateDto.id);
-			const updatedTodo = await prisma.todo.update({
-				where: { id: updateDto.id },
-				data: updateDto.values
-			});
-			return TodoEntity.fromJson(updatedTodo);
-		} catch (error) {
-			throw AppError.internalServer(error as string);
-		}
+		const errors = UpdateTodoDto.validate(updateDto);
+		if (errors.length > ZERO) throw new ValidationError(errors);
+		await this.getById(updateDto);
+		const updatedTodo = await prisma.todo.update({
+			where: { id: updateDto.id },
+			data: updateDto.values
+		});
+		return TodoEntity.fromJson(updatedTodo);
 	}
 
-	public async delete(id: number): Promise<TodoEntity> {
-		try {
-			await this.getById(id);
-			const deletedTodo = await prisma.todo.delete({
-				where: { id }
-			});
-			return TodoEntity.fromJson(deletedTodo);
-		} catch (error) {
-			throw AppError.internalServer(error as string);
-		}
+	public async delete(getByIdDto: GetTodoByIdDto): Promise<TodoEntity> {
+		const errors = GetTodoByIdDto.validate(getByIdDto);
+		if (errors.length > ZERO) throw new ValidationError(errors);
+		await this.getById(getByIdDto);
+		const deletedTodo = await prisma.todo.delete({ where: { id: getByIdDto.id } });
+		return TodoEntity.fromJson(deletedTodo);
 	}
 }

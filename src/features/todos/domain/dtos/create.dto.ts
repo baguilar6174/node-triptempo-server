@@ -1,11 +1,13 @@
+import { type ValidationType } from '../../../../core';
+
 export class CreateTodoDto {
 	constructor(public readonly text: string) {}
 
-	public static validate(dto: CreateTodoDto): string[] {
-		const errors: string[] = [];
+	public static validate(dto: CreateTodoDto): ValidationType[] {
+		const errors: ValidationType[] = [];
 
 		if (!dto.text) {
-			errors.push('Text is required');
+			errors.push({ fields: 'text', constraint: 'Text is required' });
 		}
 
 		return errors;

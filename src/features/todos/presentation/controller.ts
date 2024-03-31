@@ -9,10 +9,11 @@ import {
 	UpdateTodo,
 	type TodoRepository,
 	DeleteTodo,
-	type TodoEntity
+	type TodoEntity,
+	GetTodoByIdDto
 } from '../domain';
-import { PaginationDto } from '../../shared';
-import { type ServerResponse, ZERO } from '../../../core';
+import { PaginationDto, type PaginationResponseEntity } from '../../shared';
+import { type ServerResponse, ONE, TEN, HttpCode } from '../../../core';
 
 interface Params {
 	id: string;
@@ -24,8 +25,8 @@ interface RequestBody {
 }
 
 interface RequestQuery {
-	page: number;
-	limit: number;
+	page: string;
+	limit: string;
 }
 
 export class TodoController {
@@ -34,13 +35,11 @@ export class TodoController {
 
 	public getAll = (
 		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<ServerResponse<TodoEntity[]>>,
+		res: Response<ServerResponse<PaginationResponseEntity<TodoEntity[]>>>,
 		next: NextFunction
 	): void => {
-		const { page = 1, limit = 10 } = req.query;
+		const { page = ONE, limit = TEN } = req.query;
 		const paginationDto = new PaginationDto(+page, +limit);
-		const errors = PaginationDto.validate(paginationDto);
-		if (errors.length > ZERO) res.status(400).json({ errors });
 		new GetTodos(this.repository)
 			.execute(paginationDto)
 			.then((result) => res.json({ data: result }))
@@ -51,8 +50,9 @@ export class TodoController {
 
 	public getById = (req: Request<Params>, res: Response<ServerResponse<TodoEntity>>, next: NextFunction): void => {
 		const id = +req.params.id;
+		const getTodoByIdDto = new GetTodoByIdDto(id);
 		new GetTodoById(this.repository)
-			.execute(id)
+			.execute(getTodoByIdDto)
 			.then((result) => res.json({ data: result }))
 			.catch(next);
 	};
@@ -64,11 +64,9 @@ export class TodoController {
 	): void => {
 		const { text } = req.body;
 		const createDto = new CreateTodoDto(text);
-		const errors = CreateTodoDto.validate(createDto);
-		if (errors.length > ZERO) res.status(400).json({ errors });
 		new CreateTodo(this.repository)
 			.execute(createDto)
-			.then((result) => res.json({ data: result }))
+			.then((result) => res.status(HttpCode.CREATED).json({ data: result }))
 			.catch(next);
 	};
 
@@ -79,8 +77,6 @@ export class TodoController {
 	): void => {
 		const id = +req.params.id;
 		const updateDto = UpdateTodoDto.create({ ...req.body, id });
-		const errors = UpdateTodoDto.validate(updateDto);
-		if (errors.length > ZERO) res.status(400).json({ errors });
 		new UpdateTodo(this.repository)
 			.execute(updateDto)
 			.then((result) => res.json({ data: result }))
@@ -89,8 +85,9 @@ export class TodoController {
 
 	public delete = (req: Request<Params>, res: Response<ServerResponse<TodoEntity>>, next: NextFunction): void => {
 		const id = +req.params.id;
+		const getTodoByIdDto = new GetTodoByIdDto(id);
 		new DeleteTodo(this.repository)
-			.execute(id)
+			.execute(getTodoByIdDto)
 			.then((result) => res.json({ data: result }))
 			.catch(next);
 	};
