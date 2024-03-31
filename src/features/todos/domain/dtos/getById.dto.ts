@@ -9,7 +9,7 @@ export class GetTodoByIdDto {
 		const { id } = dto;
 
 		if (!id || isNaN(Number(id))) {
-			errors.push({ fields: 'id', constraint: 'Id is not a valid number' });
+			errors.push({ fields: ['id'], constraint: 'Id is not a valid number' });
 		}
 
 		return errors;

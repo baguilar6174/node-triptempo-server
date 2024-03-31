@@ -1,14 +1,15 @@
 export interface ValidationType {
-	fields: string | string[];
+	fields: string[];
 	constraint: string;
 }
 
-interface SuccessResponse<T> {
+export interface SuccessResponse<T> {
 	data?: T;
 }
 
-interface ErrorResponse {
-	errors: ValidationType[];
+export interface ErrorResponse {
+	name: string;
+	message: string;
+	validationErrors?: ValidationType[];
+	stack?: string;
 }
-
-export type ServerResponse<T> = SuccessResponse<T> | ErrorResponse;

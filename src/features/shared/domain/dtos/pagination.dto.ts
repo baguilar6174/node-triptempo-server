@@ -14,11 +14,11 @@ export class PaginationDto {
 		}
 
 		if (dto.page <= ZERO) {
-			errors.push({ fields: 'page', constraint: 'Page must be greater than zero' });
+			errors.push({ fields: ['page'], constraint: 'Page must be greater than zero' });
 		}
 
 		if (dto.limit <= ZERO) {
-			errors.push({ fields: 'limit', constraint: 'Limit must be greater than zero' });
+			errors.push({ fields: ['limit'], constraint: 'Limit must be greater than zero' });
 		}
 
 		return errors;

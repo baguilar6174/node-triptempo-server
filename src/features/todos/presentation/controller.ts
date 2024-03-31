@@ -13,7 +13,7 @@ import {
 	GetTodoByIdDto
 } from '../domain';
 import { PaginationDto, type PaginationResponseEntity } from '../../shared';
-import { type ServerResponse, ONE, TEN, HttpCode } from '../../../core';
+import { ONE, TEN, HttpCode, type SuccessResponse } from '../../../core';
 
 interface Params {
 	id: string;
@@ -35,7 +35,7 @@ export class TodoController {
 
 	public getAll = (
 		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<ServerResponse<PaginationResponseEntity<TodoEntity[]>>>,
+		res: Response<SuccessResponse<PaginationResponseEntity<TodoEntity[]>>>,
 		next: NextFunction
 	): void => {
 		const { page = ONE, limit = TEN } = req.query;
@@ -48,7 +48,7 @@ export class TodoController {
 			});
 	};
 
-	public getById = (req: Request<Params>, res: Response<ServerResponse<TodoEntity>>, next: NextFunction): void => {
+	public getById = (req: Request<Params>, res: Response<SuccessResponse<TodoEntity>>, next: NextFunction): void => {
 		const id = +req.params.id;
 		const getTodoByIdDto = new GetTodoByIdDto(id);
 		new GetTodoById(this.repository)
@@ -59,7 +59,7 @@ export class TodoController {
 
 	public create = (
 		req: Request<unknown, unknown, RequestBody>,
-		res: Response<ServerResponse<TodoEntity>>,
+		res: Response<SuccessResponse<TodoEntity>>,
 		next: NextFunction
 	): void => {
 		const { text } = req.body;
@@ -72,7 +72,7 @@ export class TodoController {
 
 	public update = (
 		req: Request<Params, unknown, RequestBody>,
-		res: Response<ServerResponse<TodoEntity>>,
+		res: Response<SuccessResponse<TodoEntity>>,
 		next: NextFunction
 	): void => {
 		const id = +req.params.id;
@@ -83,7 +83,7 @@ export class TodoController {
 			.catch(next);
 	};
 
-	public delete = (req: Request<Params>, res: Response<ServerResponse<TodoEntity>>, next: NextFunction): void => {
+	public delete = (req: Request<Params>, res: Response<SuccessResponse<TodoEntity>>, next: NextFunction): void => {
 		const id = +req.params.id;
 		const getTodoByIdDto = new GetTodoByIdDto(id);
 		new DeleteTodo(this.repository)

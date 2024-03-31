@@ -20,13 +20,13 @@ export class UpdateTodoDto {
 		const { id, completedAt } = dto;
 
 		if (!id || isNaN(Number(id))) {
-			errors.push({ fields: 'id', constraint: 'Id is not a valid number' });
+			errors.push({ fields: ['id'], constraint: 'Id is not a valid number' });
 		}
 
 		if (completedAt) {
 			const newDate = new Date(completedAt);
 			if (newDate.toString() === 'Invalid Date') {
-				errors.push({ fields: 'completedAt', constraint: 'CompletedAt must be a valid date' });
+				errors.push({ fields: ['completedAt'], constraint: 'CompletedAt must be a valid date' });
 			}
 		}
 

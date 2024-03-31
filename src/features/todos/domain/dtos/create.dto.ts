@@ -7,7 +7,7 @@ export class CreateTodoDto {
 		const errors: ValidationType[] = [];
 
 		if (!dto.text) {
-			errors.push({ fields: 'text', constraint: 'Text is required' });
+			errors.push({ fields: ['text'], constraint: 'Text is required' });
 		}
 
 		return errors;
