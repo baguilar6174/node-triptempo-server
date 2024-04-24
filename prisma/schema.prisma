@@ -13,8 +13,73 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-model Todo {
-  id          Int       @id @default(autoincrement())
-  text        String    @db.VarChar
-  completedAt DateTime? @db.Timestamp()
+model Region {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  provinces Province[]
+
+  @@map("tbl_region")
+}
+
+// Model for Provinces
+model Province {
+  id       String @id @unique
+  name     String @unique
+  regionId Int
+  cities   City[]
+  region   Region @relation(fields: [regionId], references: [id])
+
+  @@map("tbl_province")
+}
+
+// Model for Cities
+model City {
+  id           String        @id @unique
+  name         String        @unique
+  provinceId   String
+  busTerminals BusTerminal[]
+  routesStart  Route[]       @relation("StartCityRoutes")
+  routesEnd    Route[]       @relation("EndCityRoutes")
+  province     Province      @relation(fields: [provinceId], references: [id])
+
+  @@map("tbl_city")
+}
+
+// Model for Transportation Providers
+model TransportationProvider {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  logo    String?
+  details String?
+  routes  Route[]
+
+  @@map("tbl_transportation_provider")
+}
+
+// Model for Bus Terminals
+model BusTerminal {
+  id      Int    @id @default(autoincrement())
+  citiId  String @map("city_id")
+  name    String
+  address String
+  city    City   @relation(fields: [citiId], references: [id])
+
+  @@map("tbl_bus_terminal")
+}
+
+// Model for Routes
+model Route {
+  startCityId              String                 @map("start_city_id")
+  endCityId                String                 @map("end_city_id")
+  distance                 Int
+  price                    Float
+  estimatedTravelTime      Int                    @map("estimated_travel_time")
+  transportationProviderId Int                    @map("transportation_provider_id")
+  startCity                City                   @relation("StartCityRoutes", fields: [startCityId], references: [id])
+  endCity                  City                   @relation("EndCityRoutes", fields: [endCityId], references: [id])
+  schedules                String[]
+  transportationProvider   TransportationProvider @relation(fields: [transportationProviderId], references: [id])
+
+  @@id([startCityId, endCityId, transportationProviderId])
+  @@map("tbl_route")
 }

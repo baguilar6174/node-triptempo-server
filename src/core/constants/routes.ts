@@ -1,1 +1,1 @@
-export const TODOS_ROUTE = 'todos' as const;
+export const CITIES_ROUTE = 'cities' as const;

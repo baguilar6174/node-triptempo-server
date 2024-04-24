@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { TodoRoutes } from './features/todos';
-import { TODOS_ROUTE } from './core';
+import { CitiesRoutes } from './features/cities';
+import { CITIES_ROUTE } from './core';
 
 export class AppRoutes {
 	static get routes(): Router {
 		const router = Router();
 
-		router.use(`/${TODOS_ROUTE}`, TodoRoutes.routes);
+		router.use(`/${CITIES_ROUTE}`, CitiesRoutes.routes);
 
 		return router;
 	}

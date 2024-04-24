@@ -4,6 +4,8 @@ export * from './routes';
 
 export const ZERO = 0 as const;
 export const ONE = 1 as const;
+export const TWO = 2 as const;
+export const THREE = 3 as const;
 export const FIVE = 5 as const;
 export const SEVEN = 7 as const;
 export const TEN = 10 as const;
