@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+
 export * from './routes';
 
 export const ZERO = 0 as const;
