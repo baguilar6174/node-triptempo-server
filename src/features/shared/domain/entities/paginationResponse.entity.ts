@@ -5,6 +5,6 @@ export class PaginationResponseEntity<T> {
 		public currentPage: number,
 		public nextPage: number | null,
 		public prevPage: number | null,
-		public results: T
+		public result: T
 	) {}
 }

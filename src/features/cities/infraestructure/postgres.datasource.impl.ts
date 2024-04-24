@@ -11,7 +11,14 @@ export class DatasourceImpl implements CitiesDatasource {
 			prisma.city.count(),
 			prisma.city.findMany({
 				skip: (page - ONE) * limit,
-				take: limit
+				take: limit,
+				include: {
+					province: {
+						include: {
+							region: true
+						}
+					}
+				}
 			})
 		]);
 
@@ -20,7 +27,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			results: cities.map((city) => CityEntity.fromJson(city)),
+			result: CityEntity.fromDataBaseList(cities),
 			currentPage: page,
 			nextPage,
 			prevPage,

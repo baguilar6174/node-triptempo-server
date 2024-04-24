@@ -1,5 +1,6 @@
 import { type Region, type Province, type City, type Route, type TransportationProvider } from '@prisma/client';
 import { ONE, THREE, TWO } from '../../../../core';
+import { prisma } from './postgres';
 
 export enum REGIONS {
 	COSTA = ONE,
@@ -276,3 +277,31 @@ export const routes: Route[] = [
 		schedules: ['14:30']
 	}
 ];
+
+(() => {
+	void main();
+})();
+
+async function main(): Promise<void> {
+	try {
+		// Delete data from tables
+		await prisma.route.deleteMany();
+		await prisma.transportationProvider.deleteMany();
+		await prisma.city.deleteMany();
+		await prisma.province.deleteMany();
+		await prisma.region.deleteMany();
+
+		// Insert seed data
+		await prisma.region.createMany({ data: regions });
+		await prisma.province.createMany({ data: provinces });
+		await prisma.city.createMany({ data: cities });
+		await prisma.transportationProvider.createMany({ data: transportationProviders });
+		await prisma.route.createMany({ data: routes });
+
+		console.log('Data created!');
+	} catch (error) {
+		console.error('Error:', error);
+	} finally {
+		await prisma.$disconnect();
+	}
+}
