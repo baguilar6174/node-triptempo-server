@@ -60,9 +60,9 @@ export class Server {
 			});
 		} else {
 			// Test rest api
-			this.app.get('/', (_req: Request, res: Response) => {
+			this.app.get('/', (req: Request, res: Response) => {
 				return res.status(HttpCode.OK).send({
-					message: `Welcome to Initial API! \n Endpoints available at http://localhost:${this.port}/api/v1`
+					message: `Welcome to Initial API! \n Endpoints available at ${req.protocol}://${req.hostname}:${this.port}${this.apiPrefix}`
 				});
 			});
 			//* Handle not found routes in /api/v1/* (only if 'Public content folder' is not available)
