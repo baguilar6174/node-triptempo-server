@@ -7,7 +7,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		const errors = PaginationDto.validate(pagination);
 		if (errors.length > ZERO) throw new ValidationError(errors);
 		const { page, limit } = pagination;
-		const [total, cities] = await Promise.all([
+		const [total, data] = await Promise.all([
 			prisma.city.count(),
 			prisma.city.findMany({
 				skip: (page - ONE) * limit,
@@ -27,7 +27,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			result: CityEntity.fromDataBaseList(cities),
+			result: CityEntity.fromDataBaseList(data),
 			currentPage: page,
 			nextPage,
 			prevPage,
