@@ -41,13 +41,15 @@ export enum CITIES {
 	MACHALA = `${PROVINCES.EL_ORO}01`,
 	GUAYAQUIL = `${PROVINCES.GUAYAS}01`,
 	QUITO = `${PROVINCES.PICHINCHA}01`,
-	HUAQUILLAS = `${PROVINCES.EL_ORO}07`
+	HUAQUILLAS = `${PROVINCES.EL_ORO}07`,
+	MANTA = `${PROVINCES.MANABI}08`
 }
 
 // TODO: Better codes to each provider
 export enum PROVIDERS {
 	COOP_PATRIA = ONE,
-	COOP_CHIMBORAZO = TWO
+	COOP_CHIMBORAZO = TWO,
+	COOP_TRANS_VENCEDORES = THREE
 }
 
 export const regions: Region[] = [
@@ -91,7 +93,8 @@ export const cities: City[] = [
 	{ id: CITIES.MACHALA, name: 'Machala', provinceId: PROVINCES.EL_ORO },
 	{ id: CITIES.GUAYAQUIL, name: 'Guayaquil', provinceId: PROVINCES.GUAYAS },
 	{ id: CITIES.QUITO, name: 'Quito', provinceId: PROVINCES.PICHINCHA },
-	{ id: CITIES.HUAQUILLAS, name: 'Huaquillas', provinceId: PROVINCES.EL_ORO }
+	{ id: CITIES.HUAQUILLAS, name: 'Huaquillas', provinceId: PROVINCES.EL_ORO },
+	{ id: CITIES.MANTA, name: 'MANTA', provinceId: PROVINCES.MANABI }
 ];
 
 export const transportationProviders: TransportationProvider[] = [
@@ -105,6 +108,12 @@ export const transportationProviders: TransportationProvider[] = [
 		id: PROVIDERS.COOP_CHIMBORAZO,
 		name: 'Cooperativa Chimborazo',
 		logo: 'chimborazo.png',
+		details: null
+	},
+	{
+		id: PROVIDERS.COOP_TRANS_VENCEDORES,
+		name: 'Trans Vencedores',
+		logo: null,
 		details: null
 	}
 ];
@@ -275,6 +284,24 @@ export const routes: Route[] = [
 		estimatedTravelTime: 8,
 		price: 12.5,
 		schedules: ['14:30']
+	},
+	{
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.MANTA,
+		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
+		distance: 422,
+		estimatedTravelTime: 9,
+		price: 14.2,
+		schedules: ['08:15', '22:00']
+	},
+	{
+		startCityId: CITIES.MANTA,
+		endCityId: CITIES.RIOBAMBA,
+		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
+		distance: 422,
+		estimatedTravelTime: 9,
+		price: 13,
+		schedules: ['22:00']
 	}
 ];
 
