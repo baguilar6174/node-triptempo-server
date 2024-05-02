@@ -27,7 +27,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			result: CityEntity.fromDataBaseList(data),
+			data: CityEntity.fromDataBaseList(data),
 			currentPage: page,
 			nextPage,
 			prevPage,

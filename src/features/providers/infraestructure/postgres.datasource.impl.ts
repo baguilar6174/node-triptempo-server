@@ -53,7 +53,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			result: ProviderEntity.fromDataBaseList(data),
+			data: ProviderEntity.fromDataBaseList(data),
 			currentPage: page,
 			nextPage,
 			prevPage,
