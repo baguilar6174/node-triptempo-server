@@ -47,9 +47,16 @@ export class Server {
 		// Shared Middlewares
 		this.app.use(CustomMiddlewares.writeInConsole);
 		// CORS
-		this.app.use((_, res, next) => {
-			res.setHeader('Access-Control-Allow-Origin', ['http://localhost:3000/', 'https://trip-tempo.vercel.app/']);
-			res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+		this.app.use((req, res, next) => {
+			const allowedOrigins = ['http://localhost:3000', 'https://trip-tempo.vercel.app'];
+			const origin = req.headers.origin;
+			// TODO: Fix this
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			if (allowedOrigins.includes(origin!)) {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				res.setHeader('Access-Control-Allow-Origin', origin!);
+			}
+			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 			res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 			next();
 		});
