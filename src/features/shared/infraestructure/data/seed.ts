@@ -94,7 +94,7 @@ export const cities: City[] = [
 	{ id: CITIES.GUAYAQUIL, name: 'Guayaquil', provinceId: PROVINCES.GUAYAS },
 	{ id: CITIES.QUITO, name: 'Quito', provinceId: PROVINCES.PICHINCHA },
 	{ id: CITIES.HUAQUILLAS, name: 'Huaquillas', provinceId: PROVINCES.EL_ORO },
-	{ id: CITIES.MANTA, name: 'MANTA', provinceId: PROVINCES.MANABI }
+	{ id: CITIES.MANTA, name: 'Manta', provinceId: PROVINCES.MANABI }
 ];
 
 export const transportationProviders: TransportationProvider[] = [

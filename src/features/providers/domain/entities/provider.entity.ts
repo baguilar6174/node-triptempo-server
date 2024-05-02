@@ -30,7 +30,6 @@ export class ProviderEntity {
 			const { distance, estimatedTravelTime, price, schedules } = routes[ZERO];
 			if (!id) throw new ValidationError([{ fields: ['id'], constraint: 'id is required' }]);
 			if (!name) throw new ValidationError([{ fields: ['name'], constraint: 'name is required' }]);
-			if (!logo) throw new ValidationError([{ fields: ['logo'], constraint: 'logo is required' }]);
 			if (!routes) throw new ValidationError([{ fields: ['routes'], constraint: 'routes are required' }]);
 			if (!estimatedTravelTime) {
 				throw new ValidationError([{ fields: ['estimatedTravelTime'], constraint: 'estimatedTravelTime is required' }]);
