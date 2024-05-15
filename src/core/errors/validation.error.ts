@@ -1,4 +1,4 @@
-import { ZERO, type HttpCode } from '../constants';
+import { type HttpCode } from '../constants';
 import { type ValidationType } from '../types';
 
 export class ValidationError extends Error {
@@ -11,9 +11,5 @@ export class ValidationError extends Error {
 		this.statusCode = 400;
 		this.validationErrors = validationErrors;
 		Error.captureStackTrace(this);
-	}
-
-	public validate(): void {
-		if (this.validationErrors.length > ZERO) throw new ValidationError(this.validationErrors);
 	}
 }
