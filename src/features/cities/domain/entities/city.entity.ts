@@ -1,6 +1,4 @@
-import { ValidationError } from '../../../../core';
-
-type CompleteCityFromDB = {
+type CityFromDB = {
 	province: {
 		region: {
 			id: number;
@@ -25,16 +23,9 @@ export class CityEntity {
 		public region: string
 	) {}
 
-	public static fromDataBaseObj(dataBaseObj: CompleteCityFromDB): CityEntity {
-		const { id, name, province } = dataBaseObj;
-		if (!id) throw new ValidationError([{ fields: ['id'], constraint: 'id is required' }]);
-		if (!name) throw new ValidationError([{ fields: ['name'], constraint: 'name is required' }]);
-		if (!province.name) throw new ValidationError([{ fields: ['province'], constraint: 'province is required' }]);
-		if (!province.region.name) throw new ValidationError([{ fields: ['region'], constraint: 'region is required' }]);
-		return new CityEntity(id, name, province.name, province.region.name);
-	}
-
-	public static fromDataBaseList(dataBaseObjList: CompleteCityFromDB[]): CityEntity[] {
-		return dataBaseObjList.map((dataBaseObj) => CityEntity.fromDataBaseObj(dataBaseObj));
+	public static fromDataBase(dataBaseObjList: CityFromDB[]): CityEntity[] {
+		return dataBaseObjList.map(
+			({ id, name, province }) => new CityEntity(id, name, province.name, province.region.name)
+		);
 	}
 }

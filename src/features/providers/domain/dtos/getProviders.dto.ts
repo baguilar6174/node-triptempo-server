@@ -1,12 +1,16 @@
+import { ValidationError, ZERO } from '../../../../core';
 import { type ValidationType } from '../../../../core/types';
+import { type CoreDto } from '../../../shared';
 
-export class GetProvidersDto {
+export class GetProvidersDto implements CoreDto<GetProvidersDto> {
 	constructor(
 		public readonly startCityId: string,
 		public readonly endCityId: string
-	) {}
+	) {
+		this.validate(this);
+	}
 
-	public static validate(dto: GetProvidersDto): ValidationType[] {
+	public validate(dto: GetProvidersDto): void {
 		const errors: ValidationType[] = [];
 
 		const { startCityId, endCityId } = dto;
@@ -19,6 +23,6 @@ export class GetProvidersDto {
 			errors.push({ fields: ['endCityId'], constraint: 'endCityId is required' });
 		}
 
-		return errors;
+		if (errors.length > ZERO) throw new ValidationError(errors);
 	}
 }

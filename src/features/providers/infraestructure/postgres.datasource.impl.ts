@@ -1,20 +1,16 @@
-import { ONE, ValidationError, ZERO } from '../../../core';
-import { type PaginationResponseEntity, PaginationDto, prisma } from '../../shared';
+import { ONE } from '../../../core';
+import { type PaginationResponseEntity, type PaginationDto, prisma } from '../../shared';
 import { ProviderEntity, type ProvidersDatasource } from '../domain';
-import { GetProvidersDto } from '../domain/dtos';
+import { type GetProvidersDto } from '../domain/dtos';
 
 export class DatasourceImpl implements ProvidersDatasource {
 	public async getProviders(
 		getProvidersDto: GetProvidersDto,
 		pagination: PaginationDto
 	): Promise<PaginationResponseEntity<ProviderEntity[]>> {
-		const errorsPagination = PaginationDto.validate(pagination);
-		const errors = GetProvidersDto.validate(getProvidersDto);
-		// TODO: improve this way to show errors
-		if (errorsPagination.length > ZERO) throw new ValidationError(errorsPagination);
-		if (errors.length > ZERO) throw new ValidationError(errors);
 		const { page, limit } = pagination;
 		const { startCityId, endCityId } = getProvidersDto;
+
 		const data = await prisma.transportationProvider.findMany({
 			skip: (page - ONE) * limit,
 			take: limit,
@@ -53,7 +49,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			data: ProviderEntity.fromDataBaseList(data),
+			data: ProviderEntity.fromDataBase(data),
 			currentPage: page,
 			nextPage,
 			prevPage,
