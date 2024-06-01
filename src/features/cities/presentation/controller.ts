@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
 import { PaginationDto, type PaginationResponseEntity } from '../../shared';
-import { ONE, TEN } from '../../../core';
+import { ONE, type SuccessResponse, TEN } from '../../../core';
 import { type CityEntity, GetCities, type CitiesRepository } from '../domain';
 
 interface RequestQuery {
@@ -15,14 +15,14 @@ export class Controller {
 
 	public getAll = (
 		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<PaginationResponseEntity<CityEntity[]>>,
+		res: Response<SuccessResponse<PaginationResponseEntity<CityEntity[]>>>,
 		next: NextFunction
 	): void => {
 		const { page = ONE, limit = TEN } = req.query;
-		const paginationDto = new PaginationDto(+page, +limit);
+		const paginationDto = PaginationDto.create({ page: +page, limit: +limit });
 		new GetCities(this.repository)
 			.execute(paginationDto)
-			.then((result) => res.json(result))
+			.then((result) => res.json({ result }))
 			.catch((error) => {
 				next(error);
 			});

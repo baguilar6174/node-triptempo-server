@@ -1,7 +1,7 @@
 import winston, { format } from 'winston';
 
 import { PROD_ENVIRONMENT } from '../constants';
-import { envs } from './envs.config';
+import { envs } from './envs.adapter';
 
 export class Logger {
 	private readonly environment: string;

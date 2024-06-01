@@ -26,6 +26,7 @@ export class ProviderEntity {
 	) {}
 
 	public static fromDataBase(dataBaseObjList: ProviderFromDB): ProviderEntity[] {
+		// TODO: add validations
 		return dataBaseObjList.map(({ id, name, logo, routes, details }) => {
 			const { distance, estimatedTravelTime, price, schedules } = routes[ZERO];
 			return new ProviderEntity(id, name, logo, details, estimatedTravelTime, distance, price, schedules);

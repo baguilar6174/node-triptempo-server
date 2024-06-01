@@ -1,10 +1,11 @@
-import express, { type NextFunction, type Request, type Response, type Router } from 'express';
-import path from 'path';
+import { type Server as ServerHttp, type IncomingMessage, type ServerResponse } from 'http';
+import express, { type Router, type Request, type Response, type NextFunction } from 'express';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 
-import { AppError, HttpCode, ONE_HUNDRED, ONE_THOUSAND, SIXTY } from './core';
+import { HttpCode, ONE_HUNDRED, ONE_THOUSAND, SIXTY, AppError } from './core';
 import { CustomMiddlewares, ErrorMiddleware } from './features/shared';
+import path from 'path';
 
 interface ServerOptions {
 	port: number;
@@ -15,7 +16,8 @@ interface ServerOptions {
 }
 
 export class Server {
-	private readonly app = express();
+	public readonly app = express(); // This is public for testing purposes
+	private serverListener?: ServerHttp<typeof IncomingMessage, typeof ServerResponse>;
 	private readonly port: number;
 	private readonly publicPath: string;
 	private readonly apiPrefix: string;
@@ -44,11 +46,14 @@ export class Server {
 				message: 'Too many requests from this IP, please try again in one hour'
 			})
 		);
+
 		// Shared Middlewares
 		this.app.use(CustomMiddlewares.writeInConsole);
+
 		// CORS
 		this.app.use((req, res, next) => {
-			const allowedOrigins = ['http://localhost:3000', 'https://trip-tempo.vercel.app'];
+			// Add your origins
+			const allowedOrigins = ['http://localhost:3000'];
 			const origin = req.headers.origin;
 			// TODO: Fix this
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -74,11 +79,12 @@ export class Server {
 			});
 		} else {
 			// Test rest api
-			this.app.get('/', (req: Request, res: Response) => {
+			this.app.get('/', (_req: Request, res: Response) => {
 				return res.status(HttpCode.OK).send({
-					message: `Welcome to Initial API! \n Endpoints available at ${req.protocol}://${req.hostname}:${this.port}${this.apiPrefix}`
+					message: `Welcome to Initial API! \n Endpoints available at http://localhost:${this.port}/`
 				});
 			});
+
 			//* Handle not found routes in /api/v1/* (only if 'Public content folder' is not available)
 			this.routes.all('*', (req: Request, _: Response, next: NextFunction): void => {
 				next(AppError.notFound(`Cant find ${req.originalUrl} on this server!`));
@@ -88,8 +94,12 @@ export class Server {
 		// Handle errors middleware
 		this.routes.use(ErrorMiddleware.handleError);
 
-		this.app.listen(this.port, () => {
+		this.serverListener = this.app.listen(this.port, () => {
 			console.log(`Server running on port ${this.port}...`);
 		});
+	}
+
+	close(): void {
+		this.serverListener?.close();
 	}
 }

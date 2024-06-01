@@ -24,6 +24,7 @@ export class CityEntity {
 	) {}
 
 	public static fromDataBase(dataBaseObjList: CityFromDB[]): CityEntity[] {
+		// TODO: add validations
 		return dataBaseObjList.map(
 			({ id, name, province }) => new CityEntity(id, name, province.name, province.region.name)
 		);

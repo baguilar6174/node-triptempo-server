@@ -7,6 +7,8 @@ import { Server } from './server';
 })();
 
 function main(): void {
+	// * At this point you can connect to your database for example MongoDB
+
 	const server = new Server({
 		port: envs.PORT,
 		publicPath: envs.PUBLIC_PATH,

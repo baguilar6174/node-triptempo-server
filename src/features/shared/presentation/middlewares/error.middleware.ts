@@ -1,5 +1,5 @@
 import { type Response, type NextFunction, type Request } from 'express';
-import { AppError, type ErrorResponse, HttpCode, ValidationError } from '../../../../core';
+import { AppError, type ErrorResponse, HttpCode } from '../../../../core';
 import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
 
 export class ErrorMiddleware {
@@ -7,16 +7,11 @@ export class ErrorMiddleware {
 	// constructor() {}
 
 	public static handleError = (error: unknown, _: Request, res: Response<ErrorResponse>, next: NextFunction): void => {
-		if (error instanceof ValidationError) {
-			const { message, name, validationErrors, stack } = error;
+		if (error instanceof AppError) {
+			const { message, name, stack, validationErrors } = error;
 			const statusCode = error.statusCode || HttpCode.INTERNAL_SERVER_ERROR;
 			res.statusCode = statusCode;
 			res.json({ name, message, validationErrors, stack });
-		} else if (error instanceof AppError) {
-			const { message, name, stack } = error;
-			const statusCode = error.statusCode || HttpCode.INTERNAL_SERVER_ERROR;
-			res.statusCode = statusCode;
-			res.json({ name, message, stack });
 		} else if (error instanceof PrismaClientInitializationError) {
 			const name = 'PrismaClientInitializationError';
 			const message = 'Verify the connection to the database!';

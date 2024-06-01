@@ -1,9 +1,9 @@
-import { ValidationError, ZERO } from '../../../../core';
+import { AppError, ZERO } from '../../../../core';
 import { type ValidationType } from '../../../../core/types';
 import { type CoreDto } from '../../../shared';
 
 export class GetProvidersDto implements CoreDto<GetProvidersDto> {
-	constructor(
+	private constructor(
 		public readonly startCityId: string,
 		public readonly endCityId: string
 	) {
@@ -23,6 +23,11 @@ export class GetProvidersDto implements CoreDto<GetProvidersDto> {
 			errors.push({ fields: ['endCityId'], constraint: 'endCityId is required' });
 		}
 
-		if (errors.length > ZERO) throw new ValidationError(errors);
+		if (errors.length > ZERO) throw AppError.badRequest('Error validating create todo', errors);
+	}
+
+	public static create(object: Record<string, unknown>): GetProvidersDto {
+		const { startCityId, endCityId } = object;
+		return new GetProvidersDto(startCityId as string, endCityId as string);
 	}
 }

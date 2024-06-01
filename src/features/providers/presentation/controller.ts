@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
 import { PaginationDto, type PaginationResponseEntity } from '../../shared';
-import { ONE, TEN } from '../../../core';
+import { ONE, type SuccessResponse, TEN } from '../../../core';
 import { type ProviderEntity, GetProviders, type ProvidersRepository } from '../domain';
 import { GetProvidersDto } from '../domain/dtos';
 
@@ -18,17 +18,15 @@ export class Controller {
 
 	public getProviders = (
 		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<PaginationResponseEntity<ProviderEntity[]>>,
+		res: Response<SuccessResponse<PaginationResponseEntity<ProviderEntity[]>>>,
 		next: NextFunction
 	): void => {
 		const { startCityId, endCityId, page = ONE, limit = TEN } = req.query;
-		const paginationDto = new PaginationDto(+page, +limit);
-		const getProvidersDto = new GetProvidersDto(startCityId, endCityId);
+		const paginationDto = PaginationDto.create({ page: +page, limit: +limit });
+		const getProvidersDto = GetProvidersDto.create({ startCityId, endCityId });
 		new GetProviders(this.repository)
 			.execute(getProvidersDto, paginationDto)
-			.then((result) => res.json(result))
-			.catch((error) => {
-				next(error);
-			});
+			.then((result) => res.json({ result }))
+			.catch(next);
 	};
 }

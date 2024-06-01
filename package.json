@@ -3,7 +3,25 @@
 	"version": "1.0.0",
 	"description": "Rest API server for Trip Tempo App",
 	"main": "index.js",
-	"repository": "https://github.com/baguilar6174/node-triptempo-server.git",
+	"engines": {
+		"node": ">=20.12.0",
+		"yarn": ">=1.22.19",
+		"npm": "please-use-yarn"
+	},
+	"scripts": {
+		"test": "jest",
+		"test:watch": "jest --watchAll",
+		"test:coverage": "jest --coverage",
+		"dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
+		"build": "yarn test && rimraf ./dist && tsc && yarn prisma:migrate:prod",
+		"start": "node dist/app.js",
+		"prisma:migrate:prod": "npx prisma db push",
+		"db:seed": "ts-node ./src/features/shared/infraestructure/data/seed.ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/baguilar6174/node-triptempo-server.git"
+	},
 	"keywords": [
 		"node",
 		"console",
@@ -12,24 +30,18 @@
 		"rest",
 		"api"
 	],
-	"homepage": "https://github.com/baguilar6174/node-triptempo-server#readme",
 	"author": "Bryan Aguilar",
-	"license": "MIT",
-	"scripts": {
-		"test": "jest",
-		"test:watch": "jest --watchAll",
-		"test:coverage": "jest --coverage",
-		"dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
-		"build": "rimraf ./dist && tsc && yarn prisma:migrate:prod",
-		"start": "yarn build && node dist/app.js",
-		"prisma:migrate:prod": "npx prisma db push",
-		"db:seed": "ts-node ./src/features/shared/infraestructure/data/seed.ts"
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/baguilar6174/node-triptempo-server/issues"
 	},
+	"homepage": "https://github.com/baguilar6174/node-triptempo-server#readme",
 	"devDependencies": {
 		"@types/compression": "^1.7.5",
 		"@types/express": "^4.17.21",
 		"@types/jest": "^29.5.12",
 		"@types/node": "^20.11.30",
+		"@types/supertest": "^6.0.2",
 		"@typescript-eslint/eslint-plugin": "^6.4.0",
 		"eslint": "^8.0.1",
 		"eslint-config-prettier": "^9.1.0",
@@ -42,6 +54,7 @@
 		"prettier": "^3.2.5",
 		"prisma": "^5.11.0",
 		"rimraf": "^5.0.5",
+		"supertest": "^7.0.0",
 		"ts-jest": "^29.1.2",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "*"
