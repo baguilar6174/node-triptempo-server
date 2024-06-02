@@ -4,7 +4,7 @@ export interface ValidationType {
 }
 
 export interface SuccessResponse<T> {
-	result?: T;
+	result: T;
 }
 
 export interface ErrorResponse {

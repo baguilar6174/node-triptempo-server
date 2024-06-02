@@ -47,7 +47,7 @@ model City {
 
 // Model for Transportation Providers
 model TransportationProvider {
-  id      Int     @id @default(autoincrement())
+  id      String  @id @unique
   name    String  @unique
   logo    String?
   details String?
@@ -69,17 +69,28 @@ model BusTerminal {
 
 // Model for Routes
 model Route {
+  id                       String                 @id @unique
   startCityId              String                 @map("start_city_id")
   endCityId                String                 @map("end_city_id")
   distance                 Int
   price                    Float
   estimatedTravelTime      Int                    @map("estimated_travel_time")
-  transportationProviderId Int                    @map("transportation_provider_id")
+  transportationProviderId String                 @map("transportation_provider_id")
   startCity                City                   @relation("StartCityRoutes", fields: [startCityId], references: [id])
   endCity                  City                   @relation("EndCityRoutes", fields: [endCityId], references: [id])
-  schedules                String[]
+  schedules                Schedule[]
   transportationProvider   TransportationProvider @relation(fields: [transportationProviderId], references: [id])
 
-  @@id([startCityId, endCityId, transportationProviderId])
   @@map("tbl_route")
+}
+
+// Model for Schedules
+model Schedule {
+  id            Int     @id @default(autoincrement())
+  routeId       String  @map("route_id")
+  departureTime String  @map("departure_time")
+  isAvailable   Boolean @map("is_available")
+  route         Route   @relation(fields: [routeId], references: [id])
+
+  @@map("tbl_schedule")
 }

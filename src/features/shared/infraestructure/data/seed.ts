@@ -1,6 +1,16 @@
-import { type Region, type Province, type City, type Route, type TransportationProvider } from '@prisma/client';
+import {
+	type Region,
+	type Province,
+	type City,
+	type Route,
+	type TransportationProvider,
+	type Schedule
+} from '@prisma/client';
+
 import { ONE, THREE, TWO } from '../../../../core';
 import { prisma } from './postgres';
+
+type CreateScheduleDTO = Omit<Schedule, 'id'>;
 
 export enum REGIONS {
 	COSTA = ONE,
@@ -45,11 +55,24 @@ export enum CITIES {
 	MANTA = `${PROVINCES.MANABI}08`
 }
 
-// TODO: Better codes to each provider
 export enum PROVIDERS {
-	COOP_PATRIA = ONE,
-	COOP_CHIMBORAZO = TWO,
-	COOP_TRANS_VENCEDORES = THREE
+	COOP_PATRIA = 'PATRIA',
+	COOP_CHIMBORAZO = 'CHIMBORAZO',
+	COOP_TRANS_VENCEDORES = 'TRANS_VENCEDORES'
+}
+
+export enum ROUTES {
+	RIOBAMBA_QUITO_COOP_PATRIA = `${CITIES.RIOBAMBA}${CITIES.QUITO}${PROVIDERS.COOP_PATRIA}`,
+	QUITO_RIOBAMBA_COOP_PATRIA = `${CITIES.QUITO}${CITIES.RIOBAMBA}${PROVIDERS.COOP_PATRIA}`,
+	RIOBAMBA_QUITO_COOP_CHIMBORAZO = `${CITIES.RIOBAMBA}${CITIES.QUITO}${PROVIDERS.COOP_CHIMBORAZO}`,
+	RIOBAMBA_CUENCA_COOP_PATRIA = `${CITIES.RIOBAMBA}${CITIES.CUENCA}${PROVIDERS.COOP_PATRIA}`,
+	RIOBAMBA_MACHALA_COOP_PATRIA = `${CITIES.RIOBAMBA}${CITIES.MACHALA}${PROVIDERS.COOP_PATRIA}`,
+	CUENCA_RIOBAMBA_COOP_PATRIA = `${CITIES.CUENCA}${CITIES.RIOBAMBA}${PROVIDERS.COOP_PATRIA}`,
+	RIOBAMBA_GUAYAQUIL_COOP_PATRIA = `${CITIES.RIOBAMBA}${CITIES.GUAYAQUIL}${PROVIDERS.COOP_PATRIA}`,
+	RIOBAMBA_HUAQUILLAS_COOP_PATRIA = `${CITIES.RIOBAMBA}${CITIES.HUAQUILLAS}${PROVIDERS.COOP_PATRIA}`,
+	HUAQUILLAS_RIOBAMBA_COOP_PATRIA = `${CITIES.HUAQUILLAS}${CITIES.RIOBAMBA}${PROVIDERS.COOP_PATRIA}`,
+	RIOBAMBA_MANTA_TRANS_VENCEDORES = `${CITIES.RIOBAMBA}${CITIES.MANTA}${PROVIDERS.COOP_TRANS_VENCEDORES}`,
+	MANTA_RIOBAMBA_TRANS_VENCEDORES = `${CITIES.MANTA}${CITIES.RIOBAMBA}${PROVIDERS.COOP_TRANS_VENCEDORES}`
 }
 
 export const regions: Region[] = [
@@ -101,13 +124,13 @@ export const transportationProviders: TransportationProvider[] = [
 	{
 		id: PROVIDERS.COOP_PATRIA,
 		name: 'Cooperativa Patria',
-		logo: 'patria.png',
+		logo: null,
 		details: null
 	},
 	{
 		id: PROVIDERS.COOP_CHIMBORAZO,
 		name: 'Cooperativa Chimborazo',
-		logo: 'chimborazo.png',
+		logo: null,
 		details: null
 	},
 	{
@@ -120,12 +143,109 @@ export const transportationProviders: TransportationProvider[] = [
 
 export const routes: Route[] = [
 	{
+		id: ROUTES.RIOBAMBA_QUITO_COOP_PATRIA,
 		startCityId: CITIES.RIOBAMBA,
 		endCityId: CITIES.QUITO,
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 166,
 		estimatedTravelTime: 3.5,
-		price: 5.5,
+		price: 5.5
+	},
+	{
+		id: ROUTES.QUITO_RIOBAMBA_COOP_PATRIA,
+		startCityId: CITIES.QUITO,
+		endCityId: CITIES.RIOBAMBA,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 166,
+		estimatedTravelTime: 3.5,
+		price: 5.5
+	},
+	{
+		id: ROUTES.RIOBAMBA_QUITO_COOP_CHIMBORAZO,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.QUITO,
+		transportationProviderId: PROVIDERS.COOP_CHIMBORAZO,
+		distance: 166,
+		estimatedTravelTime: 3.5,
+		price: 5.5
+	},
+	{
+		id: ROUTES.RIOBAMBA_CUENCA_COOP_PATRIA,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.CUENCA,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 262,
+		estimatedTravelTime: 6,
+		price: 9.4
+	},
+	{
+		id: ROUTES.RIOBAMBA_MACHALA_COOP_PATRIA,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.MACHALA,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 313,
+		estimatedTravelTime: 6,
+		price: 8
+	},
+	{
+		id: ROUTES.CUENCA_RIOBAMBA_COOP_PATRIA,
+		startCityId: CITIES.CUENCA,
+		endCityId: CITIES.RIOBAMBA,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 262,
+		estimatedTravelTime: 6,
+		price: 9.4
+	},
+	{
+		id: ROUTES.RIOBAMBA_GUAYAQUIL_COOP_PATRIA,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.GUAYAQUIL,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 227,
+		estimatedTravelTime: 5,
+		price: 9
+	},
+	{
+		id: ROUTES.RIOBAMBA_HUAQUILLAS_COOP_PATRIA,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.HUAQUILLAS,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 370,
+		estimatedTravelTime: 8,
+		price: 11.5
+	},
+	{
+		id: ROUTES.HUAQUILLAS_RIOBAMBA_COOP_PATRIA,
+		startCityId: CITIES.HUAQUILLAS,
+		endCityId: CITIES.RIOBAMBA,
+		transportationProviderId: PROVIDERS.COOP_PATRIA,
+		distance: 370,
+		estimatedTravelTime: 8,
+		price: 12.5
+	},
+	{
+		id: ROUTES.RIOBAMBA_MANTA_TRANS_VENCEDORES,
+		startCityId: CITIES.RIOBAMBA,
+		endCityId: CITIES.MANTA,
+		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
+		distance: 422,
+		estimatedTravelTime: 9,
+		price: 14.2
+	},
+	{
+		id: ROUTES.MANTA_RIOBAMBA_TRANS_VENCEDORES,
+		startCityId: CITIES.MANTA,
+		endCityId: CITIES.RIOBAMBA,
+		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
+		distance: 422,
+		estimatedTravelTime: 9,
+		price: 13
+	}
+];
+
+export const schedulesData = [
+	{
+		routeId: `${ROUTES.RIOBAMBA_QUITO_COOP_PATRIA}`,
 		schedules: [
 			'03:30',
 			'05:00',
@@ -151,12 +271,7 @@ export const routes: Route[] = [
 		]
 	},
 	{
-		startCityId: CITIES.QUITO,
-		endCityId: CITIES.RIOBAMBA,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 166,
-		estimatedTravelTime: 3.5,
-		price: 5.5,
+		routeId: `${ROUTES.QUITO_RIOBAMBA_COOP_PATRIA}`,
 		schedules: [
 			'03:45',
 			'04:30',
@@ -180,12 +295,7 @@ export const routes: Route[] = [
 		]
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.QUITO,
-		transportationProviderId: PROVIDERS.COOP_CHIMBORAZO,
-		distance: 166,
-		estimatedTravelTime: 3.5,
-		price: 5.5,
+		routeId: `${ROUTES.RIOBAMBA_QUITO_COOP_CHIMBORAZO}`,
 		schedules: [
 			'03:15',
 			'05:30',
@@ -206,39 +316,19 @@ export const routes: Route[] = [
 		]
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.CUENCA,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 262,
-		estimatedTravelTime: 6,
-		price: 9.4,
+		routeId: `${ROUTES.RIOBAMBA_CUENCA_COOP_PATRIA}`,
 		schedules: ['05:30', '07:30', '09:30', '11:00', '13:00', '15:30', '19:30', '22:30']
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.MACHALA,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 313,
-		estimatedTravelTime: 6,
-		price: 8,
+		routeId: `${ROUTES.RIOBAMBA_MACHALA_COOP_PATRIA}`,
 		schedules: ['09:45', '14:15']
 	},
 	{
-		startCityId: CITIES.CUENCA,
-		endCityId: CITIES.RIOBAMBA,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 262,
-		estimatedTravelTime: 6,
-		price: 9.4,
+		routeId: `${ROUTES.CUENCA_RIOBAMBA_COOP_PATRIA}`,
 		schedules: ['04:15', '05:15', '09:40', '11:15', '14:00', '15:30', '17:30', '19:15']
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.GUAYAQUIL,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 227,
-		estimatedTravelTime: 5,
-		price: 9,
+		routeId: `${ROUTES.RIOBAMBA_GUAYAQUIL_COOP_PATRIA}`,
 		schedules: [
 			'02:00',
 			'03:00',
@@ -268,42 +358,30 @@ export const routes: Route[] = [
 		]
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.HUAQUILLAS,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 370,
-		estimatedTravelTime: 8,
-		price: 11.5,
+		routeId: `${ROUTES.RIOBAMBA_HUAQUILLAS_COOP_PATRIA}`,
 		schedules: ['21:30']
 	},
 	{
-		startCityId: CITIES.HUAQUILLAS,
-		endCityId: CITIES.RIOBAMBA,
-		transportationProviderId: PROVIDERS.COOP_PATRIA,
-		distance: 370,
-		estimatedTravelTime: 8,
-		price: 12.5,
+		routeId: `${ROUTES.HUAQUILLAS_RIOBAMBA_COOP_PATRIA}`,
 		schedules: ['14:30']
 	},
 	{
-		startCityId: CITIES.RIOBAMBA,
-		endCityId: CITIES.MANTA,
-		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
-		distance: 422,
-		estimatedTravelTime: 9,
-		price: 14.2,
+		routeId: `${ROUTES.RIOBAMBA_MANTA_TRANS_VENCEDORES}`,
 		schedules: ['08:15', '22:00']
 	},
 	{
-		startCityId: CITIES.MANTA,
-		endCityId: CITIES.RIOBAMBA,
-		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
-		distance: 422,
-		estimatedTravelTime: 9,
-		price: 13,
+		routeId: `${ROUTES.MANTA_RIOBAMBA_TRANS_VENCEDORES}`,
 		schedules: ['22:00']
 	}
 ];
+
+export const schedulesFormatted = schedulesData
+	.map(({ routeId, schedules }): CreateScheduleDTO[] => {
+		return schedules.map((departureTime): CreateScheduleDTO => {
+			return { departureTime, isAvailable: true, routeId };
+		});
+	})
+	.flat();
 
 (() => {
 	void main();
@@ -312,6 +390,7 @@ export const routes: Route[] = [
 async function main(): Promise<void> {
 	try {
 		// Delete data from tables
+		await prisma.schedule.deleteMany();
 		await prisma.route.deleteMany();
 		await prisma.transportationProvider.deleteMany();
 		await prisma.city.deleteMany();
@@ -324,6 +403,7 @@ async function main(): Promise<void> {
 		await prisma.city.createMany({ data: cities });
 		await prisma.transportationProvider.createMany({ data: transportationProviders });
 		await prisma.route.createMany({ data: routes });
+		await prisma.schedule.createMany({ data: schedulesFormatted });
 
 		console.log('Data created!');
 	} catch (error) {

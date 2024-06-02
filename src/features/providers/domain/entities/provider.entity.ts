@@ -1,12 +1,19 @@
 import { ZERO } from '../../../../core';
 
-type ProviderFromDB = Array<{
-	details: string | null;
+interface ScheduleFromDB {
 	id: number;
+	routeId: string;
+	departureTime: string;
+	isAvailable: boolean;
+}
+
+type ProviderFromDB = Array<{
+	id: string;
 	name: string;
 	logo: string | null;
+	details: string | null;
 	routes: Array<{
-		schedules: string[];
+		schedules: ScheduleFromDB[];
 		distance: number;
 		price: number;
 		estimatedTravelTime: number;
@@ -15,14 +22,14 @@ type ProviderFromDB = Array<{
 
 export class ProviderEntity {
 	constructor(
-		public id: number,
+		public id: string,
 		public name: string,
 		public logo: string | null,
 		public details: string | null,
 		public estimatedTravelTime: number,
 		public distance: number,
 		public price: number,
-		public schedules: string[]
+		public schedules: ScheduleFromDB[]
 	) {}
 
 	public static fromDataBase(dataBaseObjList: ProviderFromDB): ProviderEntity[] {
