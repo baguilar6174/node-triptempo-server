@@ -1,10 +1,9 @@
 import { ZERO } from '../../../../core';
 
+// ? Posibly this will be an Entity
 interface ScheduleFromDB {
 	id: number;
-	routeId: string;
 	departureTime: string;
-	isAvailable: boolean;
 }
 
 type ProviderFromDB = Array<{

@@ -33,7 +33,15 @@ export class DatasourceImpl implements ProvidersDatasource {
 						endCityId
 					},
 					select: {
-						schedules: true,
+						schedules: {
+							where: {
+								isAvailable: true
+							},
+							select: {
+								id: true,
+								departureTime: true
+							}
+						},
 						estimatedTravelTime: true,
 						distance: true,
 						price: true
