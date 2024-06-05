@@ -1,7 +1,7 @@
 import { type ValidationType, AppError, ZERO } from '../../../../core';
-import { type CoreDto } from '../../../shared';
+import { type CoreDTO } from '../../../shared';
 
-export class CreateProviderDto implements CoreDto<CreateProviderDto> {
+export class CreateProviderDTO implements CoreDTO<CreateProviderDTO> {
 	private constructor(
 		public readonly id: string,
 		public readonly name: string,
@@ -11,7 +11,7 @@ export class CreateProviderDto implements CoreDto<CreateProviderDto> {
 		this.validate(this);
 	}
 
-	public validate(dto: CreateProviderDto): void {
+	public validate(dto: CreateProviderDTO): void {
 		const errors: ValidationType[] = [];
 		const { id, name } = dto;
 
@@ -32,8 +32,8 @@ export class CreateProviderDto implements CoreDto<CreateProviderDto> {
 	 * @param object
 	 * @returns A new instance of this DTO
 	 */
-	public static create(object: Record<string, unknown>): CreateProviderDto {
+	public static create(object: Record<string, unknown>): CreateProviderDTO {
 		const { id, name, logo, details } = object;
-		return new CreateProviderDto(id as string, name as string, logo as string | null, details as string | null);
+		return new CreateProviderDTO(id as string, name as string, logo as string | null, details as string | null);
 	}
 }

@@ -1,7 +1,7 @@
 import { AppError, ZERO, type ValidationType } from '../../../../core';
-import { type CoreDto } from './core.dto';
+import { type CoreDTO } from './core.dto';
 
-export class PaginationDto implements CoreDto<PaginationDto> {
+export class PaginationDTO implements CoreDTO<PaginationDTO> {
 	private constructor(
 		public readonly page: number,
 		public readonly limit: number
@@ -14,7 +14,7 @@ export class PaginationDto implements CoreDto<PaginationDto> {
 	 * @param dto The instance of the PaginationDto class to be validated.
 	 * @returns void
 	 */
-	public validate(dto: PaginationDto): void {
+	public validate(dto: PaginationDTO): void {
 		const errors: ValidationType[] = [];
 
 		if (isNaN(dto.page) || isNaN(dto.limit)) {
@@ -38,8 +38,8 @@ export class PaginationDto implements CoreDto<PaginationDto> {
 	 * @param object
 	 * @returns A new instance of this DTO
 	 */
-	public static create(object: Record<string, unknown>): PaginationDto {
+	public static create(object: Record<string, unknown>): PaginationDTO {
 		const { page, limit } = object;
-		return new PaginationDto(page as number, limit as number);
+		return new PaginationDTO(page as number, limit as number);
 	}
 }

@@ -11,7 +11,8 @@ export class ProvidersRoutes {
 		const repository = new RepositoryImpl(datasource);
 		const controller = new Controller(repository);
 
-		router.get('/results', controller.getResults);
+		router.get('/tripItineraries', controller.getTripItineraries);
+		router.post('/', controller.create);
 
 		return router;
 	}

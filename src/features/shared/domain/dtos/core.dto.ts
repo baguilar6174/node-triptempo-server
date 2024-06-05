@@ -1,3 +1,3 @@
-export abstract class CoreDto<T> {
+export abstract class CoreDTO<T> {
 	abstract validate(dto: T): void;
 }

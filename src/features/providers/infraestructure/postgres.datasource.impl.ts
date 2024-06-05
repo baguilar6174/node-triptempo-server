@@ -1,20 +1,20 @@
 import { ONE } from '../../../core';
-import { type PaginationResponseEntity, type PaginationDto, prisma } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDTO, prisma } from '../../shared';
 import {
-	type CreateProviderDto,
-	type GetResultssDto,
+	type CreateProviderDTO,
+	type GetTripItineraryDTO,
 	ProviderEntity,
-	ResultEntity,
+	TripItinerary,
 	type ProvidersDatasource
 } from '../domain';
 
 export class DatasourceImpl implements ProvidersDatasource {
-	public async getResults(
-		getResultsDto: GetResultssDto,
-		pagination: PaginationDto
-	): Promise<PaginationResponseEntity<ResultEntity[]>> {
-		const { page, limit } = pagination;
-		const { startCityId, endCityId } = getResultsDto;
+	public async getTripItineraries(
+		dto: GetTripItineraryDTO,
+		paginationDTO: PaginationDTO
+	): Promise<PaginationResponseEntity<TripItinerary[]>> {
+		const { page, limit } = paginationDTO;
+		const { startCityId, endCityId } = dto;
 
 		const data = await prisma.transportationProvider.findMany({
 			skip: (page - ONE) * limit,
@@ -62,7 +62,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			data: ResultEntity.fromDataBase(data),
+			data: TripItinerary.fromDataBase(data),
 			currentPage: page,
 			nextPage,
 			prevPage,
@@ -71,7 +71,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		};
 	}
 
-	public async create(dto: CreateProviderDto): Promise<ProviderEntity> {
+	public async create(dto: CreateProviderDTO): Promise<ProviderEntity> {
 		const { id, name, logo, details } = dto;
 		const provider = await prisma.transportationProvider.create({
 			data: {

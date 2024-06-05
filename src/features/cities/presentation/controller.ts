@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { PaginationDto, type PaginationResponseEntity } from '../../shared';
+import { PaginationDTO, type PaginationResponseEntity } from '../../shared';
 import { ONE, type SuccessResponse, TEN } from '../../../core';
 import { type CityEntity, GetCities, type CitiesRepository } from '../domain';
 
@@ -19,7 +19,7 @@ export class Controller {
 		next: NextFunction
 	): void => {
 		const { page = ONE, limit = TEN } = req.query;
-		const paginationDto = PaginationDto.create({ page: +page, limit: +limit });
+		const paginationDto = PaginationDTO.create({ page: +page, limit: +limit });
 		new GetCities(this.repository)
 			.execute(paginationDto)
 			.then((result) => res.json({ result }))

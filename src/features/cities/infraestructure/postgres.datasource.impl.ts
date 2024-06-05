@@ -1,9 +1,9 @@
 import { ONE } from '../../../core';
-import { type PaginationResponseEntity, type PaginationDto, prisma } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDTO, prisma } from '../../shared';
 import { CityEntity, type CitiesDatasource } from '../domain';
 
 export class DatasourceImpl implements CitiesDatasource {
-	public async getAll(pagination: PaginationDto): Promise<PaginationResponseEntity<CityEntity[]>> {
+	public async getAll(pagination: PaginationDTO): Promise<PaginationResponseEntity<CityEntity[]>> {
 		const { page, limit } = pagination;
 
 		const [total, data] = await Promise.all([

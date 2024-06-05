@@ -1,12 +1,12 @@
-import { type PaginationDto, type PaginationResponseEntity } from '../../../shared';
-import { type CreateProviderDto, type GetResultssDto } from '../dtos';
-import { type ProviderEntity, type ResultEntity } from '../entities';
+import { type PaginationDTO, type PaginationResponseEntity } from '../../../shared';
+import { type CreateProviderDTO, type GetTripItineraryDTO } from '../dtos';
+import { type ProviderEntity, type TripItinerary } from '../entities';
 
 export abstract class ProvidersDatasource {
-	abstract getResults(
-		getResultsDto: GetResultssDto,
-		pagination: PaginationDto
-	): Promise<PaginationResponseEntity<ResultEntity[]>>;
+	abstract getTripItineraries(
+		dto: GetTripItineraryDTO,
+		paginationDTO: PaginationDTO
+	): Promise<PaginationResponseEntity<TripItinerary[]>>;
 
-	abstract create(dto: CreateProviderDto): Promise<ProviderEntity>;
+	abstract create(dto: CreateProviderDTO): Promise<ProviderEntity>;
 }

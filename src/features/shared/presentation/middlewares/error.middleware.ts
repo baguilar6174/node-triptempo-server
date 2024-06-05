@@ -1,6 +1,6 @@
 import { type Response, type NextFunction, type Request } from 'express';
 import { AppError, type ErrorResponse, HttpCode } from '../../../../core';
-import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
+import { PrismaClientInitializationError, PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class ErrorMiddleware {
 	//* Dependency injection
@@ -13,11 +13,23 @@ export class ErrorMiddleware {
 			res.statusCode = statusCode;
 			res.json({ name, message, validationErrors, stack });
 		} else if (error instanceof PrismaClientInitializationError) {
-			const name = 'PrismaClientInitializationError';
+			const { name } = error;
 			const message = 'Verify the connection to the database!';
 			const statusCode = HttpCode.INTERNAL_SERVER_ERROR;
 			res.statusCode = statusCode;
 			res.json({ name, message });
+		} else if (error instanceof PrismaClientKnownRequestError) {
+			const { meta, name, stack } = error;
+			const message = 'Error related to the request';
+			const statusCode = HttpCode.BAD_REQUEST;
+			res.statusCode = statusCode;
+			const validationErrors = [
+				{
+					fields: meta ? (meta.target as string[]) : [],
+					constraint: 'Error unique constraint violation'
+				}
+			];
+			res.json({ name, message, validationErrors, stack });
 		} else {
 			const name = 'InternalServerError';
 			const message = 'An internal server error occurred';

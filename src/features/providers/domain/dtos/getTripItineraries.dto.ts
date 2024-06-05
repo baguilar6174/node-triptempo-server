@@ -1,8 +1,8 @@
 import { AppError, ZERO } from '../../../../core';
 import { type ValidationType } from '../../../../core/types';
-import { type CoreDto } from '../../../shared';
+import { type CoreDTO } from '../../../shared';
 
-export class GetResultssDto implements CoreDto<GetResultssDto> {
+export class GetTripItineraryDTO implements CoreDTO<GetTripItineraryDTO> {
 	private constructor(
 		public readonly startCityId: string,
 		public readonly endCityId: string
@@ -10,7 +10,7 @@ export class GetResultssDto implements CoreDto<GetResultssDto> {
 		this.validate(this);
 	}
 
-	public validate(dto: GetResultssDto): void {
+	public validate(dto: GetTripItineraryDTO): void {
 		const errors: ValidationType[] = [];
 
 		const { startCityId, endCityId } = dto;
@@ -26,8 +26,8 @@ export class GetResultssDto implements CoreDto<GetResultssDto> {
 		if (errors.length > ZERO) throw AppError.badRequest('Error validating create todo', errors);
 	}
 
-	public static create(object: Record<string, unknown>): GetResultssDto {
+	public static create(object: Record<string, unknown>): GetTripItineraryDTO {
 		const { startCityId, endCityId } = object;
-		return new GetResultssDto(startCityId as string, endCityId as string);
+		return new GetTripItineraryDTO(startCityId as string, endCityId as string);
 	}
 }

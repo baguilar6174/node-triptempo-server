@@ -6,7 +6,7 @@ interface ScheduleFromDB {
 	departureTime: string;
 }
 
-type ResultFromDB = Array<{
+type TripItineraryFromDB = Array<{
 	id: string;
 	name: string;
 	logo: string | null;
@@ -19,8 +19,7 @@ type ResultFromDB = Array<{
 	}>;
 }>;
 
-// TODO: rename this class
-export class ResultEntity {
+export class TripItinerary {
 	constructor(
 		public id: string,
 		public name: string,
@@ -32,11 +31,11 @@ export class ResultEntity {
 		public schedules: ScheduleFromDB[]
 	) {}
 
-	public static fromDataBase(dataBaseObjList: ResultFromDB): ResultEntity[] {
+	public static fromDataBase(dataBaseObjList: TripItineraryFromDB): TripItinerary[] {
 		// TODO: add validations
 		return dataBaseObjList.map(({ id, name, logo, routes, details }) => {
 			const { distance, estimatedTravelTime, price, schedules } = routes[ZERO];
-			return new ResultEntity(id, name, logo, details, estimatedTravelTime, distance, price, schedules);
+			return new TripItinerary(id, name, logo, details, estimatedTravelTime, distance, price, schedules);
 		});
 	}
 }

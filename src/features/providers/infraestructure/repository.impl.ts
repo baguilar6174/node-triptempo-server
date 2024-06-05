@@ -1,24 +1,24 @@
-import { type PaginationResponseEntity, type PaginationDto } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDTO } from '../../shared';
 import {
-	type CreateProviderDto,
+	type CreateProviderDTO,
 	type ProviderEntity,
-	type GetResultssDto,
+	type GetTripItineraryDTO,
 	type ProvidersDatasource,
 	type ProvidersRepository,
-	type ResultEntity
+	type TripItinerary
 } from '../domain';
 
 export class RepositoryImpl implements ProvidersRepository {
 	constructor(private readonly datasource: ProvidersDatasource) {}
 
-	async getResults(
-		getResultsDto: GetResultssDto,
-		pagination: PaginationDto
-	): Promise<PaginationResponseEntity<ResultEntity[]>> {
-		return await this.datasource.getResults(getResultsDto, pagination);
+	async getTripItineraries(
+		dto: GetTripItineraryDTO,
+		paginationDTO: PaginationDTO
+	): Promise<PaginationResponseEntity<TripItinerary[]>> {
+		return await this.datasource.getTripItineraries(dto, paginationDTO);
 	}
 
-	async create(dto: CreateProviderDto): Promise<ProviderEntity> {
+	async create(dto: CreateProviderDTO): Promise<ProviderEntity> {
 		return await this.datasource.create(dto);
 	}
 }
