@@ -1,1 +1,2 @@
-export * from './getProviders.dto';
+export * from './getResults.dto';
+export * from './create.dto';

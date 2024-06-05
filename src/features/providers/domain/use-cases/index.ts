@@ -1,1 +1,1 @@
-export * from './getProviders.usecase';
+export * from './getResults.usecase';
