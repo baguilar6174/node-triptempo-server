@@ -1,7 +1,6 @@
 import { AppError, ONE } from '../../../core';
-import { type PaginationResponseEntity, type PaginationDTO, prisma } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDTO, prisma, type GetByIdDTO } from '../../shared';
 import {
-	type GetProviderByIdDTO,
 	type CreateProviderDTO,
 	type GetTripItineraryDTO,
 	type ProvidersDatasource,
@@ -93,7 +92,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		};
 	}
 
-	public async getById(dto: GetProviderByIdDTO): Promise<ProviderEntity> {
+	public async getById(dto: GetByIdDTO): Promise<ProviderEntity> {
 		const { id } = dto;
 		const provider = await prisma.transportationProvider.findUnique({ where: { id } });
 		if (!provider) throw AppError.notFound(`Provider with id ${id} not found`);
@@ -123,7 +122,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		return ProviderEntity.fromJson(provider);
 	}
 
-	public async delete(dto: GetProviderByIdDTO): Promise<ProviderEntity> {
+	public async delete(dto: GetByIdDTO): Promise<ProviderEntity> {
 		const { id } = await this.getById(dto);
 		const provider = await prisma.transportationProvider.delete({ where: { id } });
 		return ProviderEntity.fromJson(provider);

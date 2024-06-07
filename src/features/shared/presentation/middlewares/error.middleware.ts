@@ -1,6 +1,10 @@
 import { type Response, type NextFunction, type Request } from 'express';
 import { AppError, type ErrorResponse, HttpCode } from '../../../../core';
-import { PrismaClientInitializationError, PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {
+	PrismaClientInitializationError,
+	PrismaClientKnownRequestError,
+	PrismaClientValidationError
+} from '@prisma/client/runtime/library';
 
 export class ErrorMiddleware {
 	//* Dependency injection
@@ -30,6 +34,11 @@ export class ErrorMiddleware {
 				}
 			];
 			res.json({ name, message, validationErrors, stack });
+		} else if (error instanceof PrismaClientValidationError) {
+			const { name, message, stack } = error;
+			const statusCode = HttpCode.BAD_REQUEST;
+			res.statusCode = statusCode;
+			res.json({ name, message, stack });
 		} else {
 			const name = 'InternalServerError';
 			const message = 'An internal server error occurred';

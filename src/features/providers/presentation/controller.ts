@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { PaginationDTO, type PaginationResponseEntity } from '../../shared';
+import { GetByIdDTO, PaginationDTO, type PaginationResponseEntity } from '../../shared';
 import { ONE, type SuccessResponse, TEN, type RequestQuery, type Params } from '../../../core';
 import {
 	GetTripItineraries,
@@ -13,7 +13,6 @@ import {
 	UpdateProviderDTO,
 	UpdateProvider,
 	GetProviderById,
-	GetProviderByIdDTO,
 	GetProviders,
 	DeleteProvider
 } from '../domain';
@@ -63,7 +62,7 @@ export class Controller {
 
 	public getById = (req: Request<Params>, res: Response<SuccessResponse<ProviderEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetProviderByIdDTO.create({ id });
+		const dto = GetByIdDTO.create({ id });
 		new GetProviderById(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -98,7 +97,7 @@ export class Controller {
 
 	public delete = (req: Request<Params>, res: Response<SuccessResponse<ProviderEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetProviderByIdDTO.create({ id });
+		const dto = GetByIdDTO.create({ id });
 		new DeleteProvider(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

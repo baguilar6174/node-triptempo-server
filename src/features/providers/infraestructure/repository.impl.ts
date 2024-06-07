@@ -1,4 +1,4 @@
-import { type PaginationResponseEntity, type PaginationDTO } from '../../shared';
+import { type PaginationResponseEntity, type PaginationDTO, type GetByIdDTO } from '../../shared';
 import {
 	type CreateProviderDTO,
 	type ProviderEntity,
@@ -6,8 +6,7 @@ import {
 	type ProvidersDatasource,
 	type ProvidersRepository,
 	type TripItinerary,
-	type UpdateProviderDTO,
-	type GetProviderByIdDTO
+	type UpdateProviderDTO
 } from '../domain';
 
 export class RepositoryImpl implements ProvidersRepository {
@@ -24,7 +23,7 @@ export class RepositoryImpl implements ProvidersRepository {
 		return await this.datasource.getAll(dto);
 	}
 
-	async getById(dto: GetProviderByIdDTO): Promise<ProviderEntity> {
+	async getById(dto: GetByIdDTO): Promise<ProviderEntity> {
 		return await this.datasource.getById(dto);
 	}
 
@@ -36,7 +35,7 @@ export class RepositoryImpl implements ProvidersRepository {
 		return await this.datasource.update(dto);
 	}
 
-	async delete(dto: GetProviderByIdDTO): Promise<ProviderEntity> {
+	async delete(dto: GetByIdDTO): Promise<ProviderEntity> {
 		return await this.datasource.delete(dto);
 	}
 }
