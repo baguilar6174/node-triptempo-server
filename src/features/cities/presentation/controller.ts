@@ -1,13 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
 import { PaginationDTO, type PaginationResponseEntity } from '../../shared';
-import { ONE, type SuccessResponse, TEN } from '../../../core';
+import { ONE, type SuccessResponse, TEN, type RequestQuery } from '../../../core';
 import { type CityEntity, GetCities, type CitiesRepository } from '../domain';
-
-interface RequestQuery {
-	page: string;
-	limit: string;
-}
 
 export class Controller {
 	//* Dependency injection

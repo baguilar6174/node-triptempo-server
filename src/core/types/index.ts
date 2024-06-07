@@ -13,3 +13,12 @@ export interface ErrorResponse {
 	validationErrors?: ValidationType[];
 	stack?: string;
 }
+
+export interface Params {
+	id: string;
+}
+
+export interface RequestQuery {
+	page: string;
+	limit: string;
+}
