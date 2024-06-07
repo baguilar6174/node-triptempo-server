@@ -15,7 +15,6 @@ import {
 } from '../domain';
 
 interface RequestBody {
-	id: string;
 	startCityId: string;
 	endCityId: string;
 	distance: number;
@@ -23,6 +22,10 @@ interface RequestBody {
 	estimatedTravelTime: number;
 	transportationProviderId: string;
 }
+
+type RequestBodyCreate = RequestBody & {
+	id: string;
+};
 
 export class Controller {
 	//* Dependency injection
@@ -51,7 +54,7 @@ export class Controller {
 	};
 
 	public create = (
-		req: Request<unknown, unknown, RequestBody>,
+		req: Request<unknown, unknown, RequestBodyCreate>,
 		res: Response<SuccessResponse<RouteEntity>>,
 		next: NextFunction
 	): void => {
@@ -63,11 +66,12 @@ export class Controller {
 	};
 
 	public update = (
-		req: Request<unknown, unknown, RequestBody>,
+		req: Request<Params, unknown, RequestBody>,
 		res: Response<SuccessResponse<RouteEntity>>,
 		next: NextFunction
 	): void => {
-		const dto = UpdateRouteDTO.create({ ...req.body });
+		const { id } = req.params;
+		const dto = UpdateRouteDTO.create({ id, ...req.body });
 		new UpdateRoute(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

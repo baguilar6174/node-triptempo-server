@@ -56,6 +56,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 			}
 		});
 
+		// TODO: check pagination
 		const total = data.length;
 
 		const totalPages = Math.ceil(total / limit);
@@ -74,9 +75,11 @@ export class DatasourceImpl implements ProvidersDatasource {
 
 	public async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<ProviderEntity[]>> {
 		const { page, limit } = dto;
-		const data = await prisma.transportationProvider.findMany({ skip: (page - ONE) * limit, take: limit });
 
-		const total = data.length;
+		const [total, data] = await Promise.all([
+			prisma.route.count(),
+			prisma.transportationProvider.findMany({ skip: (page - ONE) * limit, take: limit })
+		]);
 
 		const totalPages = Math.ceil(total / limit);
 		const nextPage = page < totalPages ? page + ONE : null;

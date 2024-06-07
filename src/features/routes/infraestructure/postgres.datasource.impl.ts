@@ -7,13 +7,15 @@ const includeOptions = { include: { startCity: true, endCity: true, transportati
 export class DatasourceImpl implements RoutesDatasource {
 	public async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<RouteEntity[]>> {
 		const { page, limit } = dto;
-		const data = await prisma.route.findMany({
-			skip: (page - ONE) * limit,
-			take: limit,
-			...includeOptions
-		});
 
-		const total = data.length;
+		const [total, data] = await Promise.all([
+			prisma.route.count(),
+			prisma.route.findMany({
+				skip: (page - ONE) * limit,
+				take: limit,
+				...includeOptions
+			})
+		]);
 
 		const totalPages = Math.ceil(total / limit);
 		const nextPage = page < totalPages ? page + ONE : null;
@@ -42,6 +44,7 @@ export class DatasourceImpl implements RoutesDatasource {
 		return RouteEntity.fromJson(data);
 	}
 
+	// TODO: fix update method, allow update only some fields
 	public async update(dto: UpdateRouteDTO): Promise<RouteEntity> {
 		const { id } = await this.getById(dto);
 		const { distance, price, estimatedTravelTime } = dto;

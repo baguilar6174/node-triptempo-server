@@ -23,11 +23,14 @@ type RequestQueryTripItineraries = RequestQuery & {
 };
 
 interface RequestBody {
-	id: string;
 	name: string;
 	logo: string | null;
 	details: string | null;
 }
+
+type RequestBodyCreate = RequestBody & {
+	id: string;
+};
 
 export class Controller {
 	//* Dependency injection
@@ -70,7 +73,7 @@ export class Controller {
 	};
 
 	public create = (
-		req: Request<unknown, unknown, RequestBody>,
+		req: Request<unknown, unknown, RequestBodyCreate>,
 		res: Response<SuccessResponse<ProviderEntity>>,
 		next: NextFunction
 	): void => {
@@ -83,11 +86,12 @@ export class Controller {
 	};
 
 	public update = (
-		req: Request<unknown, unknown, RequestBody>,
+		req: Request<Params, unknown, RequestBody>,
 		res: Response<SuccessResponse<ProviderEntity>>,
 		next: NextFunction
 	): void => {
-		const { id, name, logo, details } = req.body;
+		const { id } = req.params;
+		const { name, logo, details } = req.body;
 		const dto = UpdateProviderDTO.create({ id, name, logo, details });
 		new UpdateProvider(this.repository)
 			.execute(dto)
