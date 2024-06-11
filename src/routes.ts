@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
-import { CITIES_ROUTE, PROVIDERS_ROUTE, ROUTES_ROUTE } from './core';
+import { CITIES_ROUTE, PROVIDERS_ROUTE, ROUTES_ROUTE, SCHEDULES_ROUTE } from './core';
 import { CitiesRoutes } from './features/cities';
 import { ProvidersRoutes } from './features/providers';
 import { RoutesRoutes } from './features/routes';
+import { SchedulesRoutes } from './features/schedules';
 
 export class AppRoutes {
 	static get routes(): Router {
@@ -12,6 +13,7 @@ export class AppRoutes {
 		router.use(`/${CITIES_ROUTE}`, CitiesRoutes.routes);
 		router.use(`/${PROVIDERS_ROUTE}`, ProvidersRoutes.routes);
 		router.use(`/${ROUTES_ROUTE}`, RoutesRoutes.routes);
+		router.use(`/${SCHEDULES_ROUTE}`, SchedulesRoutes.routes);
 
 		return router;
 	}

@@ -46,7 +46,7 @@ export class Controller {
 
 	public getById = (req: Request<Params>, res: Response<SuccessResponse<RouteEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new GetRouteById(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -80,7 +80,7 @@ export class Controller {
 
 	public delete = (req: Request<Params>, res: Response<SuccessResponse<RouteEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new DeleteRoute(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

@@ -8,7 +8,7 @@ export class RepositoryImpl implements CitiesRepository {
 		return await this.datasource.getAll(pagination);
 	}
 
-	async getById(dto: GetByIdDTO): Promise<CityEntity> {
+	async getById(dto: GetByIdDTO<string>): Promise<CityEntity> {
 		return await this.datasource.getById(dto);
 	}
 
@@ -16,7 +16,7 @@ export class RepositoryImpl implements CitiesRepository {
 		return await this.datasource.create(dto);
 	}
 
-	async delete(dto: GetByIdDTO): Promise<CityEntity> {
+	async delete(dto: GetByIdDTO<string>): Promise<CityEntity> {
 		return await this.datasource.delete(dto);
 	}
 }

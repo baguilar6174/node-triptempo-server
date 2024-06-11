@@ -42,7 +42,7 @@ export class Controller {
 
 	public getById = (req: Request<Params>, res: Response<SuccessResponse<CityEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new GetCityById(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -63,7 +63,7 @@ export class Controller {
 
 	public delete = (req: Request<Params>, res: Response<SuccessResponse<CityEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new DeleteCity(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

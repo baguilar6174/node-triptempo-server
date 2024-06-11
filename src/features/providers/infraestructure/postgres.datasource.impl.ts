@@ -95,7 +95,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		};
 	}
 
-	public async getById(dto: GetByIdDTO): Promise<ProviderEntity> {
+	public async getById(dto: GetByIdDTO<string>): Promise<ProviderEntity> {
 		const { id } = dto;
 		const provider = await prisma.transportationProvider.findUnique({ where: { id } });
 		if (!provider) throw AppError.notFound(`Provider with id ${id} not found`);
@@ -125,7 +125,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		return ProviderEntity.fromJson(provider);
 	}
 
-	public async delete(dto: GetByIdDTO): Promise<ProviderEntity> {
+	public async delete(dto: GetByIdDTO<string>): Promise<ProviderEntity> {
 		const { id } = await this.getById(dto);
 		const provider = await prisma.transportationProvider.delete({ where: { id } });
 		return ProviderEntity.fromJson(provider);

@@ -23,7 +23,7 @@ export class RepositoryImpl implements ProvidersRepository {
 		return await this.datasource.getAll(dto);
 	}
 
-	async getById(dto: GetByIdDTO): Promise<ProviderEntity> {
+	async getById(dto: GetByIdDTO<string>): Promise<ProviderEntity> {
 		return await this.datasource.getById(dto);
 	}
 
@@ -35,7 +35,7 @@ export class RepositoryImpl implements ProvidersRepository {
 		return await this.datasource.update(dto);
 	}
 
-	async delete(dto: GetByIdDTO): Promise<ProviderEntity> {
+	async delete(dto: GetByIdDTO<string>): Promise<ProviderEntity> {
 		return await this.datasource.delete(dto);
 	}
 }

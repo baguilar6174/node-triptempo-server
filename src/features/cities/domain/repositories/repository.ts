@@ -4,7 +4,7 @@ import { type CityEntity } from '../entities/city.entity';
 
 export abstract class CitiesRepository {
 	abstract getAll(pagination: PaginationDTO): Promise<PaginationResponseEntity<CityEntity[]>>;
-	abstract getById(dto: GetByIdDTO): Promise<CityEntity>;
+	abstract getById(dto: GetByIdDTO<string>): Promise<CityEntity>;
 	abstract create(dto: CreateCityDTO): Promise<CityEntity>;
-	abstract delete(dto: GetByIdDTO): Promise<CityEntity>;
+	abstract delete(dto: GetByIdDTO<string>): Promise<CityEntity>;
 }

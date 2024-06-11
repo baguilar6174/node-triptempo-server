@@ -1,25 +1,33 @@
 import { type ValidationType, ZERO, AppError } from '../../../../core';
 import { type CoreDTO } from '../..';
 
-export class GetByIdDTO implements CoreDTO<GetByIdDTO> {
-	private constructor(public readonly id: string) {
+export class GetByIdDTO<T> implements CoreDTO<GetByIdDTO<T>> {
+	private constructor(public readonly id: T) {
 		this.validate(this);
 	}
 
-	public validate(dto: GetByIdDTO): void {
+	public validate(dto: GetByIdDTO<T>): void {
 		const errors: ValidationType[] = [];
 
 		const { id } = dto;
 
-		if (!id || id.length < ZERO) {
-			errors.push({ fields: ['id'], constraint: 'Id is not a valid value' });
+		if (!id) {
+			throw AppError.badRequest('This entity requires an id', [{ constraint: 'id is required', fields: ['id'] }]);
+		}
+
+		if (typeof id === 'string' && id.length < ZERO) {
+			throw AppError.badRequest('This entity requires an id', [{ constraint: 'id must be a string', fields: ['id'] }]);
+		}
+
+		if (typeof id === 'number' && isNaN(Number(id))) {
+			throw AppError.badRequest('This entity requires an id', [{ constraint: 'id must be a number', fields: ['id'] }]);
 		}
 
 		if (errors.length > ZERO) throw AppError.badRequest('Error validating get by id', errors);
 	}
 
-	public static create(object: Record<string, unknown>): GetByIdDTO {
+	public static create<T>(object: Record<string, unknown>): GetByIdDTO<T> {
 		const { id } = object;
-		return new GetByIdDTO(id as string);
+		return new GetByIdDTO(id as T);
 	}
 }

@@ -65,7 +65,7 @@ export class Controller {
 
 	public getById = (req: Request<Params>, res: Response<SuccessResponse<ProviderEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new GetProviderById(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -101,7 +101,7 @@ export class Controller {
 
 	public delete = (req: Request<Params>, res: Response<SuccessResponse<ProviderEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create({ id });
+		const dto = GetByIdDTO.create<string>({ id });
 		new DeleteProvider(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

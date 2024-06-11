@@ -8,8 +8,8 @@ export abstract class ProvidersDatasource {
 		paginationDTO: PaginationDTO
 	): Promise<PaginationResponseEntity<TripItinerary[]>>;
 	abstract getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<ProviderEntity[]>>;
-	abstract getById(dto: GetByIdDTO): Promise<ProviderEntity>;
+	abstract getById(dto: GetByIdDTO<string>): Promise<ProviderEntity>;
 	abstract create(dto: CreateProviderDTO): Promise<ProviderEntity>;
 	abstract update(dto: UpdateProviderDTO): Promise<ProviderEntity>;
-	abstract delete(dto: GetByIdDTO): Promise<ProviderEntity>;
+	abstract delete(dto: GetByIdDTO<string>): Promise<ProviderEntity>;
 }

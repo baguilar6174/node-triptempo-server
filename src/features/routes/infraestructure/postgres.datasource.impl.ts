@@ -31,7 +31,7 @@ export class DatasourceImpl implements RoutesDatasource {
 		};
 	}
 
-	public async getById(dto: GetByIdDTO): Promise<RouteEntity> {
+	public async getById(dto: GetByIdDTO<string>): Promise<RouteEntity> {
 		const { id } = dto;
 		const data = await prisma.route.findUnique({ where: { id }, ...includeOptions });
 		if (!data) throw AppError.notFound(`Route with id ${id} not found`);
@@ -56,7 +56,7 @@ export class DatasourceImpl implements RoutesDatasource {
 		return RouteEntity.fromJson(data);
 	}
 
-	public async delete(dto: GetByIdDTO): Promise<RouteEntity> {
+	public async delete(dto: GetByIdDTO<string>): Promise<RouteEntity> {
 		const { id } = await this.getById(dto);
 		const data = await prisma.route.delete({ where: { id }, ...includeOptions });
 		return RouteEntity.fromJson(data);

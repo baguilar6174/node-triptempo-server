@@ -35,7 +35,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		};
 	}
 
-	public async getById(dto: GetByIdDTO): Promise<CityEntity> {
+	public async getById(dto: GetByIdDTO<string>): Promise<CityEntity> {
 		const { id } = dto;
 		const city = await prisma.city.findUnique({ where: { id }, include: { province: { include: { region: true } } } });
 		if (!city) throw AppError.notFound(`City with id ${id} not found`);
@@ -52,7 +52,7 @@ export class DatasourceImpl implements CitiesDatasource {
 		return CityEntity.fromJson(city);
 	}
 
-	public async delete(dto: GetByIdDTO): Promise<CityEntity> {
+	public async delete(dto: GetByIdDTO<string>): Promise<CityEntity> {
 		const { id } = await this.getById(dto);
 		const city = await prisma.city.delete({ where: { id }, include: { province: { include: { region: true } } } });
 		return CityEntity.fromJson(city);
