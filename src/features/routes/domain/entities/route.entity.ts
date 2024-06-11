@@ -38,8 +38,7 @@ export class RouteEntity {
 	) {}
 
 	public static fromDataBase(dataBaseObjList: RouteFromDB[]): RouteEntity[] {
-		// TODO: add validations
-		return dataBaseObjList.map((d) => RouteEntity.fromJson(d));
+		return dataBaseObjList.map((obj) => RouteEntity.fromJson(obj));
 	}
 
 	public static fromJson(obj: RouteFromDB): RouteEntity {

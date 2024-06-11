@@ -12,6 +12,9 @@ export class CitiesRoutes {
 		const controller = new Controller(repository);
 
 		router.get('/', controller.getAll);
+		router.get('/:id', controller.getById);
+		router.post('/', controller.create);
+		router.delete('/:id', controller.delete);
 
 		return router;
 	}

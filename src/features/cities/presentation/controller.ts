@@ -1,8 +1,25 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { PaginationDTO, type PaginationResponseEntity } from '../../shared';
-import { ONE, type SuccessResponse, TEN, type RequestQuery } from '../../../core';
-import { type CityEntity, GetCities, type CitiesRepository } from '../domain';
+import { GetByIdDTO, PaginationDTO, type PaginationResponseEntity } from '../../shared';
+import { ONE, type SuccessResponse, TEN, type RequestQuery, type Params } from '../../../core';
+import {
+	type CityEntity,
+	GetCities,
+	type CitiesRepository,
+	GetCityById,
+	CreateCityDTO,
+	CreateCity,
+	DeleteCity
+} from '../domain';
+
+interface RequestBody {
+	name: string;
+	provinceId: string;
+}
+
+type RequestBodyCreate = RequestBody & {
+	id: string;
+};
 
 export class Controller {
 	//* Dependency injection
@@ -21,5 +38,35 @@ export class Controller {
 			.catch((error) => {
 				next(error);
 			});
+	};
+
+	public getById = (req: Request<Params>, res: Response<SuccessResponse<CityEntity>>, next: NextFunction): void => {
+		const { id } = req.params;
+		const dto = GetByIdDTO.create({ id });
+		new GetCityById(this.repository)
+			.execute(dto)
+			.then((result) => res.json({ result }))
+			.catch(next);
+	};
+
+	public create = (
+		req: Request<unknown, unknown, RequestBodyCreate>,
+		res: Response<SuccessResponse<CityEntity>>,
+		next: NextFunction
+	): void => {
+		const dto = CreateCityDTO.create({ ...req.body });
+		new CreateCity(this.repository)
+			.execute(dto)
+			.then((result) => res.json({ result }))
+			.catch(next);
+	};
+
+	public delete = (req: Request<Params>, res: Response<SuccessResponse<CityEntity>>, next: NextFunction): void => {
+		const { id } = req.params;
+		const dto = GetByIdDTO.create({ id });
+		new DeleteCity(this.repository)
+			.execute(dto)
+			.then((result) => res.json({ result }))
+			.catch(next);
 	};
 }
