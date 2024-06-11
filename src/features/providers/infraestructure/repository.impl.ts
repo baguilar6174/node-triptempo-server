@@ -5,7 +5,7 @@ import {
 	type GetTripItineraryDTO,
 	type ProvidersDatasource,
 	type ProvidersRepository,
-	type TripItinerary,
+	type TripItineraryEntity,
 	type UpdateProviderDTO
 } from '../domain';
 
@@ -15,7 +15,7 @@ export class RepositoryImpl implements ProvidersRepository {
 	async getTripItineraries(
 		dto: GetTripItineraryDTO,
 		paginationDTO: PaginationDTO
-	): Promise<PaginationResponseEntity<TripItinerary[]>> {
+	): Promise<PaginationResponseEntity<TripItineraryEntity[]>> {
 		return await this.datasource.getTripItineraries(dto, paginationDTO);
 	}
 

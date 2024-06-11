@@ -5,7 +5,7 @@ import { ONE, type SuccessResponse, TEN, type RequestQuery, type Params } from '
 import {
 	GetTripItineraries,
 	CreateProvider,
-	type TripItinerary,
+	type TripItineraryEntity,
 	type ProvidersRepository,
 	type ProviderEntity,
 	GetTripItineraryDTO,
@@ -38,7 +38,7 @@ export class Controller {
 
 	public getTripItineraries = (
 		req: Request<unknown, unknown, unknown, RequestQueryTripItineraries>,
-		res: Response<SuccessResponse<PaginationResponseEntity<TripItinerary[]>>>,
+		res: Response<SuccessResponse<PaginationResponseEntity<TripItineraryEntity[]>>>,
 		next: NextFunction
 	): void => {
 		const { startCityId, endCityId, page = ONE, limit = TEN } = req.query;

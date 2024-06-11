@@ -6,14 +6,14 @@ import {
 	type ProvidersDatasource,
 	type UpdateProviderDTO,
 	ProviderEntity,
-	TripItinerary
+	TripItineraryEntity
 } from '../domain';
 
 export class DatasourceImpl implements ProvidersDatasource {
 	public async getTripItineraries(
 		dto: GetTripItineraryDTO,
 		paginationDTO: PaginationDTO
-	): Promise<PaginationResponseEntity<TripItinerary[]>> {
+	): Promise<PaginationResponseEntity<TripItineraryEntity[]>> {
 		const { page, limit } = paginationDTO;
 		const { startCityId, endCityId } = dto;
 
@@ -64,7 +64,7 @@ export class DatasourceImpl implements ProvidersDatasource {
 		const prevPage = page > ONE ? page - ONE : null;
 
 		return {
-			data: TripItinerary.fromDataBase(data),
+			data: TripItineraryEntity.fromDataBase(data),
 			currentPage: page,
 			nextPage,
 			prevPage,

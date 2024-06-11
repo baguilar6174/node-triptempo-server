@@ -23,7 +23,7 @@ export class GetTripItineraryDTO implements CoreDTO<GetTripItineraryDTO> {
 			errors.push({ fields: ['endCityId'], constraint: 'endCityId is required' });
 		}
 
-		if (errors.length > ZERO) throw AppError.badRequest('Error validating create todo', errors);
+		if (errors.length > ZERO) throw AppError.badRequest('Error validating get trip itineraries', errors);
 	}
 
 	public static create(object: Record<string, unknown>): GetTripItineraryDTO {

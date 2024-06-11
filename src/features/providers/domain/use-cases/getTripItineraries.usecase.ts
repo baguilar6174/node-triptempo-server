@@ -1,13 +1,13 @@
 import { type PaginationResponseEntity, type PaginationDTO } from '../../../shared';
 import { type GetTripItineraryDTO } from '../dtos';
-import { type TripItinerary } from '../entities';
+import { type TripItineraryEntity } from '../entities';
 import { type ProvidersRepository } from '../repositories/repository';
 
 export interface GetTripItinerariesUseCase {
 	execute: (
 		dto: GetTripItineraryDTO,
 		paginationDTO: PaginationDTO
-	) => Promise<PaginationResponseEntity<TripItinerary[]>>;
+	) => Promise<PaginationResponseEntity<TripItineraryEntity[]>>;
 }
 
 export class GetTripItineraries implements GetTripItinerariesUseCase {
@@ -16,7 +16,7 @@ export class GetTripItineraries implements GetTripItinerariesUseCase {
 	async execute(
 		dto: GetTripItineraryDTO,
 		paginationDTO: PaginationDTO
-	): Promise<PaginationResponseEntity<TripItinerary[]>> {
+	): Promise<PaginationResponseEntity<TripItineraryEntity[]>> {
 		return await this.repository.getTripItineraries(dto, paginationDTO);
 	}
 }

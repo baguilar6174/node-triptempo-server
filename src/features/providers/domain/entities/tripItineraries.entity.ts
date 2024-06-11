@@ -19,7 +19,7 @@ type TripItineraryFromDB = Array<{
 	}>;
 }>;
 
-export class TripItinerary {
+export class TripItineraryEntity {
 	constructor(
 		public id: string,
 		public name: string,
@@ -31,11 +31,11 @@ export class TripItinerary {
 		public schedules: ScheduleFromDB[]
 	) {}
 
-	public static fromDataBase(dataBaseObjList: TripItineraryFromDB): TripItinerary[] {
+	public static fromDataBase(dataBaseObjList: TripItineraryFromDB): TripItineraryEntity[] {
 		// TODO: add validations
 		return dataBaseObjList.map(({ id, name, logo, routes, details }) => {
 			const { distance, estimatedTravelTime, price, schedules } = routes[ZERO];
-			return new TripItinerary(id, name, logo, details, estimatedTravelTime, distance, price, schedules);
+			return new TripItineraryEntity(id, name, logo, details, estimatedTravelTime, distance, price, schedules);
 		});
 	}
 }
