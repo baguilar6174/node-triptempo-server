@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { GetByIdDTO } from '../../shared';
-import { type SuccessResponse, type Params } from '../../../core';
+import { GetByIdDTO, PaginationDTO, type PaginationResponseEntity } from '../../shared';
+import { type SuccessResponse, type Params, ONE, TEN, type RequestQuery } from '../../../core';
 import {
 	CreateSchedule,
 	type SchedulesRepository,
@@ -10,7 +10,8 @@ import {
 	UpdateScheduleDTO,
 	UpdateSchedule,
 	GetScheduleById,
-	DeleteSchedule
+	DeleteSchedule,
+	GetSchedulesByRouteId
 } from '../domain';
 
 interface RequestBody {
@@ -27,9 +28,26 @@ export class Controller {
 	//* Dependency injection
 	constructor(private readonly repository: SchedulesRepository) {}
 
+	public getAllByRouteId = (
+		req: Request<Params, unknown, unknown, RequestQuery>,
+		res: Response<SuccessResponse<PaginationResponseEntity<ScheduleEntity[]>>>,
+		next: NextFunction
+	): void => {
+		const { id } = req.params;
+		const { page = ONE, limit = TEN } = req.query;
+		const dto = GetByIdDTO.create<string>({ id });
+		const paginationDTO = PaginationDTO.create({ page: +page, limit: +limit });
+		new GetSchedulesByRouteId(this.repository)
+			.execute(dto, paginationDTO)
+			.then((result) => res.json({ result }))
+			.catch((error) => {
+				next(error);
+			});
+	};
+
 	public getById = (req: Request<Params>, res: Response<SuccessResponse<ScheduleEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create<number>({ id });
+		const dto = GetByIdDTO.create<number>({ id: +id });
 		new GetScheduleById(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -63,7 +81,7 @@ export class Controller {
 
 	public delete = (req: Request<Params>, res: Response<SuccessResponse<ScheduleEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
-		const dto = GetByIdDTO.create<number>({ id });
+		const dto = GetByIdDTO.create<number>({ id: +id });
 		new DeleteSchedule(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))

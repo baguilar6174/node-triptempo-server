@@ -11,6 +11,7 @@ export class SchedulesRoutes {
 		const repository = new RepositoryImpl(datasource);
 		const controller = new Controller(repository);
 
+		router.get('/byRouteId/:id', controller.getAllByRouteId);
 		router.get('/:id', controller.getById);
 		router.post('/', controller.create);
 		router.put('/:id', controller.update);

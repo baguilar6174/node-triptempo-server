@@ -1,1 +1,1 @@
-export * from './route.entity';
+export * from './schedule.entity';

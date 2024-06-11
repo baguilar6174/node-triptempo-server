@@ -1,8 +1,39 @@
-import { AppError } from '../../../core';
-import { prisma, type GetByIdDTO } from '../../shared';
+import { AppError, ONE } from '../../../core';
+import { type PaginationDTO, type PaginationResponseEntity, prisma, type GetByIdDTO } from '../../shared';
 import { type CreateScheduleDTO, type SchedulesDatasource, type UpdateScheduleDTO, ScheduleEntity } from '../domain';
 
 export class DatasourceImpl implements SchedulesDatasource {
+	public async getAllByRouteId(
+		dto: GetByIdDTO<string>,
+		paginationDTO: PaginationDTO
+	): Promise<PaginationResponseEntity<ScheduleEntity[]>> {
+		const { id } = dto;
+		const { page, limit } = paginationDTO;
+		const [total, data] = await Promise.all([
+			prisma.schedule.count(),
+			prisma.schedule.findMany({
+				skip: (page - ONE) * limit,
+				take: limit,
+				where: {
+					routeId: id
+				}
+			})
+		]);
+
+		const totalPages = Math.ceil(total / limit);
+		const nextPage = page < totalPages ? page + ONE : null;
+		const prevPage = page > ONE ? page - ONE : null;
+
+		return {
+			data: ScheduleEntity.fromDataBase(data),
+			currentPage: page,
+			nextPage,
+			prevPage,
+			total,
+			totalPages
+		};
+	}
+
 	public async getById(dto: GetByIdDTO<number>): Promise<ScheduleEntity> {
 		const { id } = dto;
 		const data = await prisma.schedule.findUnique({ where: { id } });
