@@ -25,13 +25,13 @@ Replace your environment variables in `.env` file
 If you need local Postgres database
 
 - Install docker
-- Run `docker compose up -d` This command create a local volumen in root project to save data.
+- Run `docker compose up -d` (Only the first time you start the project)
+
+This command create a local volumen in root project to save data.
 
 **Important**: If you don't need Postgres from Docker, set your configuration into `.env`
 
-Run `npx prisma migrate dev --name init` to create a migrations and schema in your Postgres database
-
-Run `npx prisma db push` to create tables and relationships
+Run `yarn db:seed` to create database schema in your Postgres database and create initial data
 
 Run `yarn dev`
 

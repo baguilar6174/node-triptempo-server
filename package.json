@@ -16,7 +16,7 @@
 		"build": "yarn test && rimraf ./dist && tsc && yarn prisma:migrate:prod",
 		"start": "node dist/app.js",
 		"prisma:migrate:prod": "npx prisma db push",
-		"db:seed": "ts-node ./src/features/shared/infraestructure/data/seed.ts"
+		"db:seed": "npx prisma db push && ts-node ./src/features/shared/infraestructure/data/seed.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -24,7 +24,6 @@
 	},
 	"keywords": [
 		"node",
-		"console",
 		"clean",
 		"architecture",
 		"rest",

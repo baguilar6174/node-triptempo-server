@@ -14,7 +14,8 @@ function main(): void {
 		publicPath: envs.PUBLIC_PATH,
 		apiPrefix: envs.API_PREFIX,
 		routes: AppRoutes.routes,
-		isPublicContentEnabled: false
+		isPublicContentEnabled: false,
+		allowedOrigins: envs.ALLOWED_ORIGINS
 	});
 	void server.start();
 }

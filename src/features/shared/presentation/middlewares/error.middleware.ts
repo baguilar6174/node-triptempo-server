@@ -12,10 +12,10 @@ export class ErrorMiddleware {
 
 	public static handleError = (error: unknown, _: Request, res: Response<ErrorResponse>, next: NextFunction): void => {
 		if (error instanceof AppError) {
-			const { message, name, stack, validationErrors } = error;
+			const { message, name, validationErrors } = error;
 			const statusCode = error.statusCode || HttpCode.INTERNAL_SERVER_ERROR;
 			res.statusCode = statusCode;
-			res.json({ name, message, validationErrors, stack });
+			res.json({ name, message, validationErrors });
 		} else if (error instanceof PrismaClientInitializationError) {
 			const { name } = error;
 			const message = 'Verify the connection to the database!';
@@ -23,7 +23,7 @@ export class ErrorMiddleware {
 			res.statusCode = statusCode;
 			res.json({ name, message });
 		} else if (error instanceof PrismaClientKnownRequestError) {
-			const { meta, name, stack } = error;
+			const { meta, name } = error;
 			const message = 'Error related to the request';
 			const statusCode = HttpCode.BAD_REQUEST;
 			res.statusCode = statusCode;
@@ -33,12 +33,12 @@ export class ErrorMiddleware {
 					constraint: 'Error unique constraint violation'
 				}
 			];
-			res.json({ name, message, validationErrors, stack });
+			res.json({ name, message, validationErrors });
 		} else if (error instanceof PrismaClientValidationError) {
-			const { name, message, stack } = error;
+			const { name, message } = error;
 			const statusCode = HttpCode.BAD_REQUEST;
 			res.statusCode = statusCode;
-			res.json({ name, message, stack });
+			res.json({ name, message });
 		} else {
 			const name = 'InternalServerError';
 			const message = 'An internal server error occurred';

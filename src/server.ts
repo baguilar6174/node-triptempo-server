@@ -13,6 +13,7 @@ interface ServerOptions {
 	apiPrefix: string;
 	routes: Router;
 	isPublicContentEnabled: boolean;
+	allowedOrigins: string;
 }
 
 export class Server {
@@ -23,14 +24,16 @@ export class Server {
 	private readonly apiPrefix: string;
 	private readonly routes: Router;
 	private readonly isPublicContentEnabled: boolean;
+	private readonly allowedOrigins: string;
 
 	constructor(options: ServerOptions) {
-		const { port, publicPath, routes, apiPrefix, isPublicContentEnabled } = options;
+		const { port, publicPath, routes, apiPrefix, isPublicContentEnabled, allowedOrigins } = options;
 		this.port = port;
 		this.publicPath = publicPath;
 		this.apiPrefix = apiPrefix;
 		this.routes = routes;
 		this.isPublicContentEnabled = isPublicContentEnabled;
+		this.allowedOrigins = allowedOrigins;
 	}
 
 	async start(): Promise<void> {
@@ -53,7 +56,7 @@ export class Server {
 		// CORS
 		this.app.use((req, res, next) => {
 			// Add your origins
-			const allowedOrigins = ['http://localhost:3000'];
+			const allowedOrigins = this.allowedOrigins.split(',');
 			const origin = req.headers.origin;
 			// TODO: Fix this
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
