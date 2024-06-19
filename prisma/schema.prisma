@@ -13,6 +13,17 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tbl_user")
+}
+
 model Region {
   id        Int        @id @default(autoincrement())
   name      String     @unique
@@ -41,28 +52,34 @@ model City {
   routesStart  Route[]       @relation("StartCityRoutes")
   routesEnd    Route[]       @relation("EndCityRoutes")
   province     Province      @relation(fields: [provinceId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@map("tbl_city")
 }
 
 // Model for Transportation Providers
 model TransportationProvider {
-  id      String  @id @unique
-  name    String  @unique
-  logo    String?
-  details String?
-  routes  Route[]
+  id        String   @id @unique
+  name      String   @unique
+  logo      String?
+  details   String?
+  routes    Route[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("tbl_transportation_provider")
 }
 
 // Model for Bus Terminals
 model BusTerminal {
-  id      Int    @id @default(autoincrement())
-  citiId  String @map("city_id")
-  name    String
-  address String
-  city    City   @relation(fields: [citiId], references: [id])
+  id        Int      @id @default(autoincrement())
+  citiId    String   @map("city_id")
+  name      String
+  address   String
+  city      City     @relation(fields: [citiId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("tbl_bus_terminal")
 }
@@ -80,17 +97,21 @@ model Route {
   endCity                  City                   @relation("EndCityRoutes", fields: [endCityId], references: [id])
   schedules                Schedule[]
   transportationProvider   TransportationProvider @relation(fields: [transportationProviderId], references: [id])
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
 
   @@map("tbl_route")
 }
 
 // Model for Schedules
 model Schedule {
-  id            Int     @id @default(autoincrement())
-  routeId       String  @map("route_id")
-  departureTime String  @map("departure_time")
-  isAvailable   Boolean @map("is_available")
-  route         Route   @relation(fields: [routeId], references: [id])
+  id            Int      @id @default(autoincrement())
+  routeId       String   @map("route_id")
+  departureTime String   @map("departure_time")
+  isAvailable   Boolean  @map("is_available")
+  route         Route    @relation(fields: [routeId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("tbl_schedule")
 }

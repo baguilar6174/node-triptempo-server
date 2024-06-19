@@ -1,11 +1,8 @@
-// src/features/auth/domain/repositories/repository.ts
-
-import { type LoginUserDto, type RegisterUserDto } from '../dtos';
+import { type GetUserDTO, type LoginUserDTO, type RegisterUserDTO } from '../dtos';
 import { type UserEntity, type AuthEntity } from '../entities';
 
 export abstract class AuthRepository {
-	abstract register(dto: RegisterUserDto): Promise<AuthEntity>;
-	abstract login(dto: LoginUserDto): Promise<AuthEntity>;
-	// TODO: create a DTO for this method
-	abstract getUserById(dto: string): Promise<UserEntity>;
+	abstract register(dto: RegisterUserDTO): Promise<AuthEntity>;
+	abstract login(dto: LoginUserDTO): Promise<AuthEntity>;
+	abstract getUser(dto: GetUserDTO): Promise<UserEntity>;
 }

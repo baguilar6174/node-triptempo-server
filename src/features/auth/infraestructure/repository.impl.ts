@@ -1,26 +1,25 @@
-// src/features/auth/infraestructure/repository.impl.ts
-
 import {
-	type RegisterUserDto,
+	type RegisterUserDTO,
 	type AuthRepository,
 	type AuthEntity,
 	type AuthDatasource,
-	type LoginUserDto,
-	type UserEntity
+	type LoginUserDTO,
+	type UserEntity,
+	type GetUserDTO
 } from '../domain';
 
 export class AuthRepositoryImpl implements AuthRepository {
 	constructor(private readonly datasource: AuthDatasource) {}
 
-	public async register(dto: RegisterUserDto): Promise<AuthEntity> {
+	public async register(dto: RegisterUserDTO): Promise<AuthEntity> {
 		return await this.datasource.register(dto);
 	}
 
-	public async login(dto: LoginUserDto): Promise<AuthEntity> {
+	public async login(dto: LoginUserDTO): Promise<AuthEntity> {
 		return await this.datasource.login(dto);
 	}
 
-	public async getUserById(dto: string): Promise<UserEntity> {
-		return await this.datasource.getUserById(dto);
+	public async getUser(dto: GetUserDTO): Promise<UserEntity> {
+		return await this.datasource.getUser(dto);
 	}
 }

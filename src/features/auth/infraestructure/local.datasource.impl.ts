@@ -1,44 +1,21 @@
-// src/features/auth/infraestructure/local.datasource.impl.ts
-
-import { AppError, ONE, basicEncript, basicJWT } from '../../../core';
-import { type RegisterUserDto, type AuthDatasource, UserEntity, AuthEntity, type LoginUserDto } from '../domain';
-
-const USERS_MOCK = [
-	{
-		id: '1',
-		name: 'Test User',
-		email: 'test@test.com',
-		emailVerified: false,
-		password: 'ca0711461f3b8387d01cc0c0cf532a4fb4b5fdf0207f7902fa75580718da497a',
-		role: ['USER_ROLE'],
-		avatar: 'https://avatars.dicebear.com/api/initials/T.svg'
-	},
-	{
-		id: '2',
-		name: 'Test User 2',
-		email: 'test2@test.com',
-		emailVerified: false,
-		password: 'ca0711461f3b8387d01cc0c0cf532a4fb4b5fdf0207f7902fa75580718da497a',
-		role: ['USER_ROLE']
-	}
-];
+import { AppError, basicEncript, basicJWT } from '../../../core';
+import { prisma } from '../../shared';
+import {
+	type RegisterUserDTO,
+	type AuthDatasource,
+	UserEntity,
+	AuthEntity,
+	type LoginUserDTO,
+	GetUserDTO
+} from '../domain';
 
 export class AuthDatasourceImpl implements AuthDatasource {
-	public async register(dto: RegisterUserDto): Promise<AuthEntity> {
-		const user = USERS_MOCK.find((user) => user.email === dto.email);
-		if (user) {
-			throw AppError.badRequest('User already exists', [{ constraint: 'User already exists', fields: ['email'] }]);
-		}
-		const createdUser = {
-			...dto,
-			id: (USERS_MOCK.length + ONE).toString(),
-			emailVerified: false,
-			role: ['USER_ROLE']
-		};
-		// Hash the password
-		createdUser.password = basicEncript.hashPassword(dto.password);
-		// Add the user to the mock
-		USERS_MOCK.push(createdUser);
+	public async register(dto: RegisterUserDTO): Promise<AuthEntity> {
+		const user = await prisma.user.findUnique({ where: { email: dto.email } });
+		if (user) throw AppError.badRequest('User with this email already exists');
+		const createdUser = await prisma.user.create({
+			data: { ...dto, password: basicEncript.hashPassword(dto.password) }
+		});
 		// Create the auth entity (omit the password)
 		const { password, ...rest } = UserEntity.fromJson(createdUser);
 		const token = basicJWT.generateToken({ id: createdUser.id });
@@ -46,9 +23,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
 		return new AuthEntity(rest, token);
 	}
 
-	public async login(dto: LoginUserDto): Promise<AuthEntity> {
-		const user = USERS_MOCK.find((user) => user.email === dto.email);
-		if (!user) throw AppError.badRequest('User with this email not found');
+	public async login(dto: LoginUserDTO): Promise<AuthEntity> {
+		const user = await this.getUser(GetUserDTO.create({ email: dto.email }));
 		const isPasswordMatch = basicEncript.comparePassword(dto.password, user.password);
 		if (!isPasswordMatch) throw AppError.badRequest('Invalid password');
 		const { password, ...rest } = UserEntity.fromJson({ ...user });
@@ -57,9 +33,9 @@ export class AuthDatasourceImpl implements AuthDatasource {
 		return new AuthEntity(rest, token);
 	}
 
-	public async getUserById(dto: string): Promise<UserEntity> {
-		const user = USERS_MOCK.find((user) => user.id === dto);
-		if (!user) throw AppError.badRequest('User with this id not found');
-		return UserEntity.fromJson({ ...user });
+	public async getUser(dto: GetUserDTO): Promise<UserEntity> {
+		const user = await prisma.user.findUnique({ where: { ...dto } });
+		if (!user) throw AppError.badRequest('User not found');
+		return UserEntity.fromJson(user);
 	}
 }

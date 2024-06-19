@@ -1,7 +1,7 @@
 import { type Response, type NextFunction, type Request } from 'express';
 import { AppError, ONE, basicJWT } from '../../../../core';
 
-import { type AuthRepository, GetUserById } from '../../../auth';
+import { type AuthRepository, GetUser, GetUserDTO } from '../../../auth';
 
 export class AuthMiddleware {
 	//* Dependency injection
@@ -21,8 +21,9 @@ export class AuthMiddleware {
 
 		if (!payload) throw AppError.unauthorized('Invalid token');
 
-		new GetUserById(this.repository)
-			.execute(payload.id)
+		const dto = GetUserDTO.create({ id: payload.id });
+		new GetUser(this.repository)
+			.execute(dto)
 			.then((result) => {
 				req.body.user = result;
 				next();

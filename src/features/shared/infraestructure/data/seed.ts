@@ -110,14 +110,16 @@ export const provinces: Province[] = [
 	{ name: 'Zamora Chinchipe', regionId: REGIONS.ORIENTE, id: PROVINCES.ZAMORA_CHINCHIPE }
 ];
 
+const dateFields = { createdAt: new Date(), updatedAt: new Date() };
+
 export const cities: City[] = [
-	{ id: CITIES.CUENCA, name: 'Cuenca', provinceId: PROVINCES.AZUAY },
-	{ id: CITIES.RIOBAMBA, name: 'Riobamba', provinceId: PROVINCES.CHIMBORAZO },
-	{ id: CITIES.MACHALA, name: 'Machala', provinceId: PROVINCES.EL_ORO },
-	{ id: CITIES.GUAYAQUIL, name: 'Guayaquil', provinceId: PROVINCES.GUAYAS },
-	{ id: CITIES.QUITO, name: 'Quito', provinceId: PROVINCES.PICHINCHA },
-	{ id: CITIES.HUAQUILLAS, name: 'Huaquillas', provinceId: PROVINCES.EL_ORO },
-	{ id: CITIES.MANTA, name: 'Manta', provinceId: PROVINCES.MANABI }
+	{ id: CITIES.CUENCA, name: 'Cuenca', provinceId: PROVINCES.AZUAY, ...dateFields },
+	{ id: CITIES.RIOBAMBA, name: 'Riobamba', provinceId: PROVINCES.CHIMBORAZO, ...dateFields },
+	{ id: CITIES.MACHALA, name: 'Machala', provinceId: PROVINCES.EL_ORO, ...dateFields },
+	{ id: CITIES.GUAYAQUIL, name: 'Guayaquil', provinceId: PROVINCES.GUAYAS, ...dateFields },
+	{ id: CITIES.QUITO, name: 'Quito', provinceId: PROVINCES.PICHINCHA, ...dateFields },
+	{ id: CITIES.HUAQUILLAS, name: 'Huaquillas', provinceId: PROVINCES.EL_ORO, ...dateFields },
+	{ id: CITIES.MANTA, name: 'Manta', provinceId: PROVINCES.MANABI, ...dateFields }
 ];
 
 export const transportationProviders: TransportationProvider[] = [
@@ -125,19 +127,22 @@ export const transportationProviders: TransportationProvider[] = [
 		id: PROVIDERS.COOP_PATRIA,
 		name: 'Cooperativa Patria',
 		logo: null,
-		details: null
+		details: null,
+		...dateFields
 	},
 	{
 		id: PROVIDERS.COOP_CHIMBORAZO,
 		name: 'Cooperativa Chimborazo',
 		logo: null,
-		details: null
+		details: null,
+		...dateFields
 	},
 	{
 		id: PROVIDERS.COOP_TRANS_VENCEDORES,
 		name: 'Trans Vencedores',
 		logo: null,
-		details: null
+		details: null,
+		...dateFields
 	}
 ];
 
@@ -149,7 +154,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 166,
 		estimatedTravelTime: 3.5,
-		price: 5.5
+		price: 5.5,
+		...dateFields
 	},
 	{
 		id: ROUTES.QUITO_RIOBAMBA_COOP_PATRIA,
@@ -158,7 +164,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 166,
 		estimatedTravelTime: 3.5,
-		price: 5.5
+		price: 5.5,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_QUITO_COOP_CHIMBORAZO,
@@ -167,7 +174,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_CHIMBORAZO,
 		distance: 166,
 		estimatedTravelTime: 3.5,
-		price: 5.5
+		price: 5.5,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_CUENCA_COOP_PATRIA,
@@ -176,7 +184,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 262,
 		estimatedTravelTime: 6,
-		price: 9.4
+		price: 9.4,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_MACHALA_COOP_PATRIA,
@@ -185,7 +194,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 313,
 		estimatedTravelTime: 6,
-		price: 8
+		price: 8,
+		...dateFields
 	},
 	{
 		id: ROUTES.CUENCA_RIOBAMBA_COOP_PATRIA,
@@ -194,7 +204,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 262,
 		estimatedTravelTime: 6,
-		price: 9.4
+		price: 9.4,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_GUAYAQUIL_COOP_PATRIA,
@@ -203,7 +214,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 227,
 		estimatedTravelTime: 5,
-		price: 9
+		price: 9,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_HUAQUILLAS_COOP_PATRIA,
@@ -212,7 +224,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 370,
 		estimatedTravelTime: 8,
-		price: 11.5
+		price: 11.5,
+		...dateFields
 	},
 	{
 		id: ROUTES.HUAQUILLAS_RIOBAMBA_COOP_PATRIA,
@@ -221,7 +234,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_PATRIA,
 		distance: 370,
 		estimatedTravelTime: 8,
-		price: 12.5
+		price: 12.5,
+		...dateFields
 	},
 	{
 		id: ROUTES.RIOBAMBA_MANTA_TRANS_VENCEDORES,
@@ -230,7 +244,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
 		distance: 422,
 		estimatedTravelTime: 9,
-		price: 14.2
+		price: 14.2,
+		...dateFields
 	},
 	{
 		id: ROUTES.MANTA_RIOBAMBA_TRANS_VENCEDORES,
@@ -239,7 +254,8 @@ export const routes: Route[] = [
 		transportationProviderId: PROVIDERS.COOP_TRANS_VENCEDORES,
 		distance: 422,
 		estimatedTravelTime: 9,
-		price: 13
+		price: 13,
+		...dateFields
 	}
 ];
 
@@ -378,7 +394,7 @@ export const schedulesData = [
 export const schedulesFormatted = schedulesData
 	.map(({ routeId, schedules }): CreateScheduleDTO[] => {
 		return schedules.map((departureTime): CreateScheduleDTO => {
-			return { departureTime, isAvailable: true, routeId };
+			return { departureTime, isAvailable: true, routeId, ...dateFields };
 		});
 	})
 	.flat();

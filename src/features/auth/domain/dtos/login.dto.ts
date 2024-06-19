@@ -5,7 +5,7 @@ import { type CoreDTO } from '../../../shared';
  * DTOs must have a validate method that throws an error
  * if the data is invalid or missing required fields.
  */
-export class LoginUserDto implements CoreDTO<LoginUserDto> {
+export class LoginUserDTO implements CoreDTO<LoginUserDTO> {
 	private constructor(
 		public readonly email: string,
 		public readonly password: string
@@ -13,7 +13,7 @@ export class LoginUserDto implements CoreDTO<LoginUserDto> {
 		this.validate(this);
 	}
 
-	public validate(dto: LoginUserDto): void {
+	public validate(dto: LoginUserDTO): void {
 		const errors: ValidationType[] = [];
 		const { email, password } = dto;
 
@@ -34,8 +34,8 @@ export class LoginUserDto implements CoreDTO<LoginUserDto> {
 	 * @param object
 	 * @returns A new instance of this DTO
 	 */
-	public static create(object: Record<string, unknown>): LoginUserDto {
+	public static create(object: Record<string, unknown>): LoginUserDTO {
 		const { email, password } = object;
-		return new LoginUserDto(email as string, password as string);
+		return new LoginUserDTO(email as string, password as string);
 	}
 }

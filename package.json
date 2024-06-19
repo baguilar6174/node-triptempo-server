@@ -13,10 +13,10 @@
 		"test:watch": "jest --watchAll",
 		"test:coverage": "jest --coverage",
 		"dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
-		"build": "yarn test && rimraf ./dist && tsc && yarn prisma:migrate:prod",
+		"build": "yarn test && rimraf ./dist && tsc && yarn db:create",
 		"start": "node dist/app.js",
-		"prisma:migrate:prod": "npx prisma db push",
-		"db:seed": "npx prisma db push && ts-node ./src/features/shared/infraestructure/data/seed.ts"
+		"db:create": "npx prisma db push",
+		"db:seed": "yarn db:create && ts-node ./src/features/shared/infraestructure/data/seed.ts"
 	},
 	"repository": {
 		"type": "git",

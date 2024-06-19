@@ -5,11 +5,11 @@ import { type NextFunction, type Request, type Response } from 'express';
 import { HttpCode, type SuccessResponse } from '../../../core';
 import {
 	type AuthRepository,
-	RegisterUserDto,
+	RegisterUserDTO,
 	LoginUser,
 	type AuthEntity,
 	RegisterUser,
-	LoginUserDto
+	LoginUserDTO
 } from '../domain';
 
 interface RequestBodyLogin {
@@ -17,11 +17,9 @@ interface RequestBodyLogin {
 	password: string;
 }
 
-interface RequestBodyRegister {
+type RequestBodyRegister = RequestBodyLogin & {
 	name: string;
-	email: string;
-	password: string;
-}
+};
 
 export class AuthController {
 	//* Dependency injection
@@ -32,8 +30,7 @@ export class AuthController {
 		res: Response<SuccessResponse<AuthEntity>>,
 		next: NextFunction
 	): void => {
-		const { email, password } = req.body;
-		const dto = LoginUserDto.create({ email, password });
+		const dto = LoginUserDTO.create({ ...req.body });
 		new LoginUser(this.repository)
 			.execute(dto)
 			.then((result) => res.json({ result }))
@@ -45,8 +42,7 @@ export class AuthController {
 		res: Response<SuccessResponse<AuthEntity>>,
 		next: NextFunction
 	): void => {
-		const { email, name, password } = req.body;
-		const dto = RegisterUserDto.create({ email, name, password });
+		const dto = RegisterUserDTO.create({ ...req.body });
 		new RegisterUser(this.repository)
 			.execute(dto)
 			.then((result) => res.status(HttpCode.CREATED).json({ result }))

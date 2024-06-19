@@ -37,6 +37,8 @@ Run `yarn dev`
 
 If your want to create build production, run `yarn build`
 
+**Important**: If you want to re create database schema, run `yarn prisma:db`
+
 ## My process
 
 ### Built with
