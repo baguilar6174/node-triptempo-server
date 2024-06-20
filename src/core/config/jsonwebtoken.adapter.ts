@@ -1,4 +1,4 @@
-import { type JwtPayload, sign, verify } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
 import { envs } from './envs.adapter';
 
@@ -28,7 +28,7 @@ export const jsonWebToken = {
 	 * @param {string} token - The JWT token to verify.
 	 * @returns {Record<string, any> | null} The decoded payload if the token is valid, otherwise null.
 	 */
-	validateToken: async <T>(token: string): Promise<T | JwtPayload | undefined> => {
+	validateToken: async <T>(token: string): Promise<T | undefined> => {
 		return await new Promise((resolve) => {
 			verify(token, JWT_SEED, (err, decoded) => {
 				if (!err) resolve(decoded as T);

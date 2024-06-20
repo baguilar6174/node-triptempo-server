@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Controller } from './controller';
 import { DatasourceImpl, RepositoryImpl } from '../infraestructure';
+import { authMiddleware } from '../../auth';
 
 export class ProvidersRoutes {
 	static get routes(): Router {
@@ -14,9 +15,9 @@ export class ProvidersRoutes {
 		router.get('/tripItineraries', controller.getTripItineraries);
 		router.get('/', controller.getAll);
 		router.get('/:id', controller.getById);
-		router.post('/', controller.create);
-		router.put('/:id', controller.update);
-		router.delete('/:id', controller.delete);
+		router.post('/', [authMiddleware], controller.create);
+		router.put('/:id', [authMiddleware], controller.update);
+		router.delete('/:id', [authMiddleware], controller.delete);
 
 		return router;
 	}

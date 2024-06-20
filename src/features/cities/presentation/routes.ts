@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Controller } from './controller';
 import { DatasourceImpl, RepositoryImpl } from '../infraestructure';
+import { authMiddleware } from '../../auth';
 
 export class CitiesRoutes {
 	static get routes(): Router {
@@ -13,8 +14,8 @@ export class CitiesRoutes {
 
 		router.get('/', controller.getAll);
 		router.get('/:id', controller.getById);
-		router.post('/', controller.create);
-		router.delete('/:id', controller.delete);
+		router.post('/', [authMiddleware], controller.create);
+		router.delete('/:id', [authMiddleware], controller.delete);
 
 		return router;
 	}

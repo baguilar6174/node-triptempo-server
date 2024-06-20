@@ -66,8 +66,10 @@ export class Controller {
 			.catch(next);
 	};
 
+	// TODO: Verify types
 	public update = (
-		req: Request<Params, unknown, RequestBody>,
+		// req: Request<Params, unknown, RequestBody>,
+		req: Request,
 		res: Response<SuccessResponse<ScheduleEntity>>,
 		next: NextFunction
 	): void => {
@@ -79,7 +81,13 @@ export class Controller {
 			.catch(next);
 	};
 
-	public delete = (req: Request<Params>, res: Response<SuccessResponse<ScheduleEntity>>, next: NextFunction): void => {
+	// TODO: Verify types
+	public delete = (
+		// req: Request<Params>,
+		req: Request,
+		res: Response<SuccessResponse<ScheduleEntity>>,
+		next: NextFunction
+	): void => {
 		const { id } = req.params;
 		const dto = GetByIdDTO.create<number>({ id: +id });
 		new DeleteSchedule(this.repository)
