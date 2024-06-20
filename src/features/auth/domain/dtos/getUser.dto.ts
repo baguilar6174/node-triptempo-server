@@ -11,7 +11,7 @@ export class GetUserDTO implements CoreDTO<GetUserDTO> {
 
 	public validate(dto: GetUserDTO): void {
 		const { email, id } = dto;
-		if (!email || !id) throw AppError.badRequest('Either id or email must be provided');
+		if (!email && !id) throw AppError.badRequest('Either id or email must be provided');
 	}
 
 	public static create(object: Record<string, unknown>): GetUserDTO {
