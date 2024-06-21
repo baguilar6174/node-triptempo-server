@@ -1,9 +1,8 @@
 import winston, { format } from 'winston';
 
 import { PROD_ENVIRONMENT } from '../constants';
-import { envs } from './envs.adapter';
-
-export class Logger {
+import { envsAdapter } from './envs.adapter';
+export class WinstonAdapter {
 	private readonly environment: string;
 	private readonly logger = winston.createLogger({
 		level: 'info',
@@ -12,7 +11,7 @@ export class Logger {
 	});
 
 	constructor() {
-		this.environment = envs.NODE_ENV;
+		this.environment = envsAdapter.NODE_ENV;
 		this.init();
 		// Posible singleton pattern?
 	}

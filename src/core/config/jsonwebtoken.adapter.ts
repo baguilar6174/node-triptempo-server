@@ -1,13 +1,13 @@
 import { sign, verify } from 'jsonwebtoken';
 
-import { envs } from './envs.adapter';
+import { envsAdapter } from './envs.adapter';
 
-const JWT_SEED = envs.JWT_SEED;
+const JWT_SEED = envsAdapter.JWT_SEED;
 
 /**
  * JWT adapter for basic authentication.
  */
-export const jsonWebToken = {
+export const jsonwebtokenAdapter = {
 	/**
 	 * Creates a JWT token.
 	 * @param {Record<string, any>} payload - The payload of the token.

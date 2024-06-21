@@ -1,4 +1,4 @@
-import { AppError, bcrypt, jsonWebToken } from '../../../core';
+import { AppError, bcryptAdapter, jsonwebtokenAdapter } from '../../../core';
 import { prisma } from '../../shared';
 import {
 	type RegisterUserDTO,
@@ -14,11 +14,11 @@ export class AuthDatasourceImpl implements AuthDatasource {
 		const user = await prisma.user.findUnique({ where: { email: dto.email } });
 		if (user) throw AppError.badRequest('User with this email already exists');
 		const createdUser = await prisma.user.create({
-			data: { ...dto, password: bcrypt.hash(dto.password) }
+			data: { ...dto, password: bcryptAdapter.hash(dto.password) }
 		});
 		// Create the auth entity (omit the password)
 		const { password, ...rest } = UserEntity.fromJson(createdUser);
-		const token = await jsonWebToken.generateToken({ id: createdUser.id });
+		const token = await jsonwebtokenAdapter.generateToken({ id: createdUser.id });
 		if (!token) throw AppError.internalServer('Error generating token');
 		return new AuthEntity(rest, token);
 	}
@@ -26,10 +26,10 @@ export class AuthDatasourceImpl implements AuthDatasource {
 	public async login(dto: LoginUserDTO): Promise<AuthEntity> {
 		const user = await prisma.user.findUnique({ where: { email: dto.email } });
 		if (!user) throw AppError.badRequest('Invalid credentials');
-		const isPasswordMatch = bcrypt.comparePassword(dto.password, user.password);
+		const isPasswordMatch = bcryptAdapter.comparePassword(dto.password, user.password);
 		if (!isPasswordMatch) throw AppError.badRequest('Invalid credentials');
 		const { password, ...rest } = UserEntity.fromJson(user);
-		const token = await jsonWebToken.generateToken({ id: user.id });
+		const token = await jsonwebtokenAdapter.generateToken({ id: user.id });
 		if (!token) throw AppError.internalServer('Error generating token');
 		return new AuthEntity(rest, token);
 	}

@@ -61,13 +61,7 @@ export class Controller {
 			.catch(next);
 	};
 
-	// TODO: Verify types
-	public delete = (
-		// req: Request<Params>,
-		req: Request,
-		res: Response<SuccessResponse<CityEntity>>,
-		next: NextFunction
-	): void => {
+	public delete = (req: Request<Params>, res: Response<SuccessResponse<CityEntity>>, next: NextFunction): void => {
 		const { id } = req.params;
 		const dto = GetByIdDTO.create<string>({ id });
 		new DeleteCity(this.repository)

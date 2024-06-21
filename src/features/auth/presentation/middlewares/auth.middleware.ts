@@ -1,5 +1,5 @@
 import { type Response, type NextFunction, type Request } from 'express';
-import { AppError, ONE, jsonWebToken } from '../../../../core';
+import { AppError, ONE, jsonwebtokenAdapter } from '../../../../core';
 
 import { type AuthRepository, GetUser, GetUserDTO } from '../../../auth';
 
@@ -18,7 +18,7 @@ export class AuthMiddleware {
 			}
 
 			const token = authorization.split(' ').at(ONE) ?? '';
-			const payload = await jsonWebToken.validateToken<{ id: string }>(token);
+			const payload = await jsonwebtokenAdapter.validateToken<{ id: string }>(token);
 
 			if (!payload) throw AppError.unauthorized('Invalid token');
 

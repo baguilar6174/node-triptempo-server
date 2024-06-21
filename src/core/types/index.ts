@@ -1,3 +1,4 @@
+import { type ParamsDictionary } from 'express-serve-static-core';
 export interface ValidationType {
 	fields: string[];
 	constraint: string;
@@ -14,9 +15,9 @@ export interface ErrorResponse {
 	stack?: string;
 }
 
-export interface Params {
+export type Params = ParamsDictionary & {
 	id: string;
-}
+};
 
 export interface RequestQuery {
 	page: string;

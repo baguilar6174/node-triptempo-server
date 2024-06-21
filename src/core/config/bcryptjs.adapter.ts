@@ -1,6 +1,6 @@
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 
-export const bcrypt = {
+export const bcryptAdapter = {
 	/**
 	 * Generates a hash for a password with a salt.
 	 * @param password - The password to hash.
