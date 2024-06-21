@@ -47,6 +47,9 @@ If your want to create build production, run `yarn build`
 - Typescript
 - Express
 - Prisma
+- bcryptjs
+- jsonwebtoken
+- winston
 
 ### What I learned
 
