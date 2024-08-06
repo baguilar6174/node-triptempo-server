@@ -1,38 +1,11 @@
-import { AppError, ONE } from '../../../core';
-import { type PaginationResponseEntity, type PaginationDTO, prisma, type GetByIdDTO } from '../../shared';
+import { AppError } from '../../../core';
+import { prisma, type GetByIdDTO } from '../../shared';
 import { CityEntity, type CitiesDatasource, type CreateCityDTO } from '../domain';
 
 export class DatasourceImpl implements CitiesDatasource {
-	public async getAll(pagination: PaginationDTO): Promise<PaginationResponseEntity<CityEntity[]>> {
-		const { page, limit } = pagination;
-
-		const [total, data] = await Promise.all([
-			prisma.city.count(),
-			prisma.city.findMany({
-				skip: (page - ONE) * limit,
-				take: limit,
-				include: {
-					province: {
-						include: {
-							region: true
-						}
-					}
-				}
-			})
-		]);
-
-		const totalPages = Math.ceil(total / limit);
-		const nextPage = page < totalPages ? page + ONE : null;
-		const prevPage = page > ONE ? page - ONE : null;
-
-		return {
-			data: CityEntity.fromDataBase(data),
-			currentPage: page,
-			nextPage,
-			prevPage,
-			total,
-			totalPages
-		};
+	public async getAll(): Promise<CityEntity[]> {
+		const [data] = await Promise.all([prisma.city.findMany({ include: { province: { include: { region: true } } } })]);
+		return CityEntity.fromDataBase(data);
 	}
 
 	public async getById(dto: GetByIdDTO<string>): Promise<CityEntity> {

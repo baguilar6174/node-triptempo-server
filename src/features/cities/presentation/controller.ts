@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { GetByIdDTO, PaginationDTO, type PaginationResponseEntity } from '../../shared';
-import { ONE, type SuccessResponse, TEN, type RequestQuery, type Params } from '../../../core';
+import { GetByIdDTO } from '../../shared';
+import { type SuccessResponse, type Params } from '../../../core';
 import {
 	type CityEntity,
 	GetCities,
@@ -25,15 +25,9 @@ export class Controller {
 	//* Dependency injection
 	constructor(private readonly repository: CitiesRepository) {}
 
-	public getAll = (
-		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<SuccessResponse<PaginationResponseEntity<CityEntity[]>>>,
-		next: NextFunction
-	): void => {
-		const { page = ONE, limit = TEN } = req.query;
-		const paginationDto = PaginationDTO.create({ page: +page, limit: +limit });
+	public getAll = (_: Request, res: Response<SuccessResponse<CityEntity[]>>, next: NextFunction): void => {
 		new GetCities(this.repository)
-			.execute(paginationDto)
+			.execute()
 			.then((result) => res.json({ result }))
 			.catch((error) => {
 				next(error);
