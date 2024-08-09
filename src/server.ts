@@ -64,8 +64,8 @@ export class Server {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				res.setHeader('Access-Control-Allow-Origin', origin!);
 			}
-			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-			res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+			res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
 			next();
 		});
 
