@@ -1,4 +1,4 @@
-import { type PaginationResponseEntity, type PaginationDTO, type GetByIdDTO } from '../../shared';
+import { type GetByIdDTO } from '../../shared';
 import {
 	type CreateRouteDTO,
 	type RouteEntity,
@@ -10,8 +10,8 @@ import {
 export class RepositoryImpl implements RoutesRepository {
 	constructor(private readonly datasource: RoutesDatasource) {}
 
-	async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<RouteEntity[]>> {
-		return await this.datasource.getAll(dto);
+	async getAll(): Promise<RouteEntity[]> {
+		return await this.datasource.getAll();
 	}
 
 	async getById(dto: GetByIdDTO<string>): Promise<RouteEntity> {

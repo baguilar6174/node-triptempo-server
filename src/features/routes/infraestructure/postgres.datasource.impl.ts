@@ -1,34 +1,17 @@
-import { AppError, ONE } from '../../../core';
-import { type PaginationResponseEntity, type PaginationDTO, prisma, type GetByIdDTO } from '../../shared';
+import { AppError } from '../../../core';
+import { prisma, type GetByIdDTO } from '../../shared';
 import { type CreateRouteDTO, type RoutesDatasource, type UpdateRouteDTO, RouteEntity } from '../domain';
 
 const includeOptions = { include: { startCity: true, endCity: true, transportationProvider: true } };
 
 export class DatasourceImpl implements RoutesDatasource {
-	public async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<RouteEntity[]>> {
-		const { page, limit } = dto;
-
-		const [total, data] = await Promise.all([
-			prisma.route.count(),
+	public async getAll(): Promise<RouteEntity[]> {
+		const [data] = await Promise.all([
 			prisma.route.findMany({
-				skip: (page - ONE) * limit,
-				take: limit,
 				...includeOptions
 			})
 		]);
-
-		const totalPages = Math.ceil(total / limit);
-		const nextPage = page < totalPages ? page + ONE : null;
-		const prevPage = page > ONE ? page - ONE : null;
-
-		return {
-			data: RouteEntity.fromDataBase(data),
-			currentPage: page,
-			nextPage,
-			prevPage,
-			total,
-			totalPages
-		};
+		return RouteEntity.fromDataBase(data);
 	}
 
 	public async getById(dto: GetByIdDTO<string>): Promise<RouteEntity> {

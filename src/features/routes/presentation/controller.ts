@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 
-import { GetByIdDTO, PaginationDTO, type PaginationResponseEntity } from '../../shared';
-import { ONE, type SuccessResponse, TEN, type RequestQuery, type Params } from '../../../core';
+import { GetByIdDTO } from '../../shared';
+import { type SuccessResponse, type Params } from '../../../core';
 import {
 	CreateRoute,
 	type RoutesRepository,
@@ -31,15 +31,9 @@ export class Controller {
 	//* Dependency injection
 	constructor(private readonly repository: RoutesRepository) {}
 
-	public getAll = (
-		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<SuccessResponse<PaginationResponseEntity<RouteEntity[]>>>,
-		next: NextFunction
-	): void => {
-		const { page = ONE, limit = TEN } = req.query;
-		const paginationDTO = PaginationDTO.create({ page: +page, limit: +limit });
+	public getAll = (_: Request, res: Response<SuccessResponse<RouteEntity[]>>, next: NextFunction): void => {
 		new GetRoutes(this.repository)
-			.execute(paginationDTO)
+			.execute()
 			.then((result) => res.json({ result }))
 			.catch(next);
 	};
