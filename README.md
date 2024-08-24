@@ -71,7 +71,9 @@ If your want to create build production, run `yarn build`
 
 ## Improves
 
--
+- Join cities to create different routes
+- Same origin and destination with different routes (Sierra or Costa for example)
+- Add round trips
 
 ## Stay in touch
 
