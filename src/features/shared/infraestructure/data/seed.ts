@@ -148,6 +148,13 @@ export const transportationProviders: TransportationProvider[] = [
 		logo: null,
 		details: null,
 		...dateFields
+	},
+	{
+		id: PROVIDERS.COOP_SANTA,
+		name: 'Santa',
+		logo: null,
+		details: null,
+		...dateFields
 	}
 ];
 
