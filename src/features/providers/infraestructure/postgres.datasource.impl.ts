@@ -73,26 +73,9 @@ export class DatasourceImpl implements ProvidersDatasource {
 		};
 	}
 
-	public async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<ProviderEntity[]>> {
-		const { page, limit } = dto;
-
-		const [total, data] = await Promise.all([
-			prisma.route.count(),
-			prisma.transportationProvider.findMany({ skip: (page - ONE) * limit, take: limit })
-		]);
-
-		const totalPages = Math.ceil(total / limit);
-		const nextPage = page < totalPages ? page + ONE : null;
-		const prevPage = page > ONE ? page - ONE : null;
-
-		return {
-			data: data.map((todo) => ProviderEntity.fromJson(todo)),
-			currentPage: page,
-			nextPage,
-			prevPage,
-			total,
-			totalPages
-		};
+	public async getAll(): Promise<ProviderEntity[]> {
+		const data = await prisma.transportationProvider.findMany();
+		return data.map((todo) => ProviderEntity.fromJson(todo));
 	}
 
 	public async getById(dto: GetByIdDTO<string>): Promise<ProviderEntity> {

@@ -19,8 +19,8 @@ export class RepositoryImpl implements ProvidersRepository {
 		return await this.datasource.getTripItineraries(dto, paginationDTO);
 	}
 
-	async getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<ProviderEntity[]>> {
-		return await this.datasource.getAll(dto);
+	async getAll(): Promise<ProviderEntity[]> {
+		return await this.datasource.getAll();
 	}
 
 	async getById(dto: GetByIdDTO<string>): Promise<ProviderEntity> {

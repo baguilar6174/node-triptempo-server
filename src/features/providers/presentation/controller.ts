@@ -52,13 +52,11 @@ export class Controller {
 
 	public getAll = (
 		req: Request<unknown, unknown, unknown, RequestQuery>,
-		res: Response<SuccessResponse<PaginationResponseEntity<ProviderEntity[]>>>,
+		res: Response<SuccessResponse<ProviderEntity[]>>,
 		next: NextFunction
 	): void => {
-		const { page = ONE, limit = TEN } = req.query;
-		const paginationDTO = PaginationDTO.create({ page: +page, limit: +limit });
 		new GetProviders(this.repository)
-			.execute(paginationDTO)
+			.execute()
 			.then((result) => res.json({ result }))
 			.catch(next);
 	};

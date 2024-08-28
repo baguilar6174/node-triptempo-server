@@ -7,7 +7,7 @@ export abstract class ProvidersRepository {
 		dto: GetTripItineraryDTO,
 		paginationDTO: PaginationDTO
 	): Promise<PaginationResponseEntity<TripItineraryEntity[]>>;
-	abstract getAll(dto: PaginationDTO): Promise<PaginationResponseEntity<ProviderEntity[]>>;
+	abstract getAll(): Promise<ProviderEntity[]>;
 	abstract getById(dto: GetByIdDTO<string>): Promise<ProviderEntity>;
 	abstract create(dto: CreateProviderDTO): Promise<ProviderEntity>;
 	abstract update(dto: UpdateProviderDTO): Promise<ProviderEntity>;
