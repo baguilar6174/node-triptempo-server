@@ -79,4 +79,4 @@ If your want to create build production, run `yarn build`
 
 - Website - [www.bryan-aguilar.com](https://www.bryan-aguilar.com/)
 - Medium - [baguilar6174](https://baguilar6174.medium.com/)
-- LinkeIn - [baguilar6174](https://www.linkedin.com/in/baguilar6174)
+- LinkedIn - [baguilar6174](https://www.linkedin.com/in/baguilar6174)
